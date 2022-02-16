@@ -49,12 +49,8 @@ export default function ForgotPasswordScreen() {
           </View>
         </View>
       </Modal>
-      <Text style={styles.title}>Forgot password</Text>
-      <Text style={styles.detail}>
-        Please enter your email address to get reset link
-      </Text>
+      <Text style={styles.textInputTitle}> Email</Text>
       <View style={styles.input}>
-        <Text style={styles.textInputTitle}> Email</Text>
         <TextInput
           style={styles.textInput}
           value={email}
@@ -92,7 +88,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: '5%',
   },
-
   textStyle: {
     color: '#ffffff',
     textAlign: 'center',
@@ -100,7 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   btnLogin: {
-    backgroundColor: '#DB147F',
+    backgroundColor: '#3366CC',
     padding: 15,
     borderRadius: 10,
     width: '100%',
@@ -140,5 +135,8 @@ const styles = StyleSheet.create({
     width: '85%',
     marginTop: 20,
     alignItems: 'center',
+  },
+  textInputTitle: {
+    fontSize: 15,
   },
 });

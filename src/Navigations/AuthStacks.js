@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginScreen from '../Screens/AuthScreen/LoginScreen';
 import ForgotPasswordScreen from '../Screens/AuthScreen/ForgorPassword';
+import SplashScreen from '../../SplashScreen';
+import RegisterScreen from '../Screens/AuthScreen/RegisterScreen';
 const AuthStack = createStackNavigator();
 
 const AuthStackScreen = ({ navigation }) => (
@@ -16,18 +18,27 @@ const AuthStackScreen = ({ navigation }) => (
         fontWeight: 'bold',
       },
     }}
+    initialRouteName="Splash"
   >
     <AuthStack.Screen
-      name="Login"
-      component={LoginScreen}
-      options={{
-        headerShown: false,
-      }}
+      name="Splash"
+      component={SplashScreen}
+      options={{ headerShown: false }}
     />
+    <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{}} />
     <AuthStack.Screen
       name="ForgotScreen"
       component={ForgotPasswordScreen}
-      options={{ title: null }}
+      options={{
+        title: 'Forgor password',
+      }}
+    />
+    <AuthStack.Screen
+      name="RegisterScreen"
+      component={RegisterScreen}
+      options={{
+        title: 'Register Screen',
+      }}
     />
   </AuthStack.Navigator>
 );

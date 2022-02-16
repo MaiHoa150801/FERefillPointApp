@@ -3,15 +3,17 @@ import Btn from '../../components/Button';
 import { useState } from 'react';
 import AnimatedLoader from 'react-native-animated-loader';
 import { ScrollView } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Image } from 'react-native';
+import Space from '../../components/Space';
 
 export default function LoginScreen({ navigation, reloadApp }) {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [hidenpassword, setHidenPassword] = useState(true);
-  const [errors, setErrors] = useState('');
+  const [errors, setErrors] = useState(null);
 
   const checkError = (err) => {
     switch (err) {
@@ -39,44 +41,28 @@ export default function LoginScreen({ navigation, reloadApp }) {
   };
   return (
     <View style={styles.container}>
-      <AnimatedLoader
-        visible={visible}
-        overlayColor="rgba(255,255,255,0.75)"
-        animationStyle="#DB147F"
-        speed={1}
-      >
-        <Text>Loading...</Text>
-      </AnimatedLoader>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <View style={{ alignItems: 'center' }}>
-            <View style={styles.checkView}>
-              <AntDesign name="checkcircle" size={40} color="#27C754" />
-            </View>
-          </View>
-          <View style={styles.divider}></View>
           <View style={styles.form}>
             <View style={styles.input}>
-              <Text style={styles.textInputTitle}> Email</Text>
               <TextInput
                 style={styles.textInput}
                 value={email}
                 onChangeText={setEmail}
-                placeholder=" Enter your email"
+                placeholder="Email"
               />
             </View>
             <View style={styles.input}>
-              <Text> Password</Text>
               <View style={styles.inputPass}>
                 <TextInput
                   style={styles.textInput}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={hidenpassword ? true : false}
-                  placeholder=" Enter your password"
+                  placeholder="Password"
                 />
                 <TouchableOpacity
                   onPress={() => setHidenPassword(!hidenpassword)}
@@ -89,14 +75,9 @@ export default function LoginScreen({ navigation, reloadApp }) {
                 </TouchableOpacity>
               </View>
             </View>
-            <Text style={styles.err}>{errors}</Text>
+            {errors && <Text style={styles.err}>{errors}</Text>}
           </View>
-          <View
-            style={{
-              alignItems: 'flex-end',
-              marginTop: 10,
-            }}
-          >
+          <View>
             <TouchableOpacity
               onPress={() => navigation.navigate('ForgotScreen')}
             >
@@ -110,17 +91,35 @@ export default function LoginScreen({ navigation, reloadApp }) {
             style={styles.btnLogin}
           />
           <View style={styles.divider}></View>
-          <View style={styles.textFooter}>
-            <Text style={styles.txt}>
-              If you have trouble logging in to KindiCare CRM,
-            </Text>
-            <Text style={{ color: '#DB147F', marginTop: '1%' }}>
-              {' '}
-              please contact our Customer Care team.
-            </Text>
+          <View style={styles.textOr}>
+            <Text style={styles.or}>Or</Text>
+          </View>
+          <View style={styles.row}>
+            <Image
+              source={{
+                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png',
+              }}
+              width={40}
+              height={40}
+              style={{ width: 50, height: 50 }}
+            />
+            <Space width={30} />
+            <Image
+              source={{
+                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png',
+              }}
+              width={40}
+              height={40}
+              style={{ width: 50, height: 50 }}
+            />
           </View>
         </View>
       </ScrollView>
+      <View style={styles.textFooter}>
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+          <Text style={{ fontSize: 15 }}>No account yet? Register</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -132,23 +131,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
-    width: 150,
-    height: 150,
-    alignContent: 'center',
-  },
-  checkView: {
-    backgroundColor: '#92E2A952',
-    height: 90,
-    width: 90,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: '10%',
-  },
   content: {
     width: '90%',
-    margin: '5%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   textStyle: {
     color: '#ffffff',
@@ -158,7 +144,7 @@ const styles = StyleSheet.create({
   },
 
   btnLogin: {
-    backgroundColor: '#DB147F',
+    backgroundColor: '#3366CC',
     padding: 15,
     borderRadius: 10,
     width: '100%',
@@ -171,8 +157,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '100%',
-    padding: 5,
-    borderRadius: 5,
+    padding: 10,
   },
   form: {
     width: '100%',
@@ -181,21 +166,28 @@ const styles = StyleSheet.create({
     padding: 5,
     borderWidth: 1,
     borderColor: '#d9d5d4',
-    borderRadius: 10,
+    borderRadius: 40,
     marginBottom: '5%',
   },
   inputPass: {
     flexDirection: 'row',
+    alignItems: 'center',
     width: '90%',
   },
   textForgor: {
     textAlign: 'right',
-    color: '#DB147F',
+    color: '#111111',
   },
   textFooter: {
-    marginTop: '50%',
+    marginBottom: 60,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  textOr: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+    marginTop: 25,
   },
   txt: {
     color: 'black',
@@ -203,12 +195,16 @@ const styles = StyleSheet.create({
     margin: 2,
     fontSize: 15,
   },
-  lottie: {
-    width: 100,
-    height: 100,
-  },
   err: {
     color: 'red',
     paddingLeft: 10,
+  },
+  or: {
+    fontSize: 17,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
