@@ -34,7 +34,9 @@ export default function LoginScreen({ navigation, reloadApp }) {
         break;
     }
   };
-  const onSubmit = async () => {};
+  const onSubmit = async () => {
+    navigation.navigate('HomeTab');
+  };
   return (
     <View style={styles.container}>
       <AnimatedLoader

@@ -1,21 +1,12 @@
 import { StyleSheet } from 'react-native';
 import React from 'react';
-import { SignInContextProvider } from './src/Context/authContext';
 import Main from './src/Navigations/Main';
 import { StatusBar } from 'react-native';
 import { LogBox } from 'react-native';
+import { View } from 'react-native';
 LogBox.ignoreAllLogs();
 export default function App() {
-  return (
-    <SignInContextProvider>
-      <StatusBar
-        translucent
-        barStyle="light-content"
-        backgroundColor="#DB147F"
-      />
-      <Main />
-    </SignInContextProvider>
-  );
+  return <Main />;
 }
 
 const styles = StyleSheet.create({
