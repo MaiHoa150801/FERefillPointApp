@@ -1,125 +1,217 @@
 import { StyleSheet, Text, TextInput, View, Alert } from 'react-native';
 import Btn from '../../components/Button';
 import { useState } from 'react';
-import AnimatedLoader from 'react-native-animated-loader';
 import { ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from 'react-native';
 import Space from '../../components/Space';
-
+import * as Google from 'expo-google-app-auth';
+import {
+  signInWithCredential,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { auth } from '../../../firebase';
+import * as Facebook from 'expo-facebook';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { ToastAndroid, Toast } from 'react-native';
 export default function LoginScreen({ navigation, reloadApp }) {
-  const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
   const [hidenpassword, setHidenPassword] = useState(true);
-  const [errors, setErrors] = useState(null);
 
   const checkError = (err) => {
     switch (err) {
-      case 'auth/missing-email':
-        setErrors('Email is required');
-        break;
-      case 'auth/invalid-email':
-        setErrors('Invalid email');
-        break;
-      case 'auth/internal-error':
-        setErrors('Password is required');
-        break;
       case 'auth/user-not-found':
-        setErrors('User not found');
+        showToastWithGravity('User not found!');
         break;
       case 'auth/wrong-password':
-        setErrors('Incorrect password');
+        showToastWithGravity('Incorrect password!');
         break;
       default:
         break;
     }
   };
-  const onSubmit = async () => {
-    navigation.navigate('HomeTab');
+  const loginWithEmail = async (data) => {
+    const { email, password } = data;
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      checkError(error.code);
+    }
+  };
+  const signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId:
+          '301647466997-nsfjo1drogmaun60nu2f939991hn663b.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      });
+
+      if (result.type === 'success') {
+        try {
+          const credential = GoogleAuthProvider.credential(
+            result.idToken,
+            result.accessToken
+          );
+          const user = await signInWithCredential(auth, credential);
+        } catch {}
+      } else {
+        return { cancelled: true };
+      }
+    } catch {}
+  };
+  async function loginWithFacebook() {
+    await Facebook.initializeAsync('359802282610628');
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+      permissions: ['public_profile'],
+    });
+    if (type === 'success') {
+      const credential = FacebookAuthProvider.credential(token);
+      signInWithCredential(auth, credential).catch((error) => {});
+    }
+  }
+  const validationSchema = Yup.object({
+    email: Yup.string().email('!Invalid Email').required('!Email is required'),
+    password: Yup.string().required('!Password is required'),
+  });
+
+  const initialValues = {
+    email: '',
+    password: '',
+  };
+  const showToastWithGravity = (message) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER
+    );
   };
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+        }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.content}>
-          <View style={styles.form}>
-            <View style={styles.input}>
-              <TextInput
-                style={styles.textInput}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Email"
-              />
-            </View>
-            <View style={styles.input}>
-              <View style={styles.inputPass}>
-                <TextInput
-                  style={styles.textInput}
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={hidenpassword ? true : false}
-                  placeholder="Password"
-                />
-                <TouchableOpacity
-                  onPress={() => setHidenPassword(!hidenpassword)}
-                >
-                  {hidenpassword ? (
-                    <Feather name="eye-off" size={20} color="black" />
-                  ) : (
-                    <Feather name="eye" size={20} color="black" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-            {errors && <Text style={styles.err}>{errors}</Text>}
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ForgotScreen')}
-            >
-              <Text style={styles.textForgor}>Forgot password?</Text>
-            </TouchableOpacity>
-          </View>
-          <Btn
-            text="Login"
-            textStyle={styles.textStyle}
-            onPress={onSubmit}
-            style={styles.btnLogin}
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={{
+              uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
+            }}
+            width={200}
+            height={200}
+            style={{ width: 200, height: 200 }}
           />
+        </View>
+        <View style={styles.content}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values, formikActions) => {
+              loginWithEmail(values);
+            }}
+          >
+            {(props) => (
+              <>
+                <View style={styles.form}>
+                  <View style={styles.field}>
+                    <View style={styles.input}>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={props.handleChange('email')}
+                        onBlur={props.handleBlur('email')}
+                        autoFocus
+                        value={props.values.email}
+                        placeholder="Email"
+                      />
+                    </View>
+                    {props.touched.email && props.errors.email ? (
+                      <Text style={styles.err}>{props.errors.email}</Text>
+                    ) : null}
+                  </View>
+
+                  <View style={styles.input}>
+                    <View style={styles.inputPass}>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={props.handleChange('password')}
+                        onBlur={props.handleBlur('password')}
+                        value={props.values.password}
+                        secureTextEntry={hidenpassword ? true : false}
+                        placeholder="Password"
+                      />
+                      <TouchableOpacity
+                        onPress={() => setHidenPassword(!hidenpassword)}
+                      >
+                        {hidenpassword ? (
+                          <Feather name="eye-off" size={20} color="black" />
+                        ) : (
+                          <Feather name="eye" size={20} color="black" />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  {props.touched.password && props.errors.password ? (
+                    <Text style={styles.err}>{props.errors.password}</Text>
+                  ) : null}
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ForgotScreen')}
+                  >
+                    <Text style={styles.textForgor}>Forgot password?</Text>
+                  </TouchableOpacity>
+                </View>
+                <Btn
+                  text="Login"
+                  textStyle={styles.textStyle}
+                  onPress={props.handleSubmit}
+                  style={styles.btnLogin}
+                />
+              </>
+            )}
+          </Formik>
           <View style={styles.divider}></View>
           <View style={styles.textOr}>
             <Text style={styles.or}>Or</Text>
           </View>
           <View style={styles.row}>
-            <Image
-              source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png',
-              }}
-              width={40}
-              height={40}
-              style={{ width: 50, height: 50 }}
-            />
+            <TouchableOpacity onPress={signInWithGoogleAsync}>
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png',
+                }}
+                width={40}
+                height={40}
+                style={{ width: 50, height: 50 }}
+              />
+            </TouchableOpacity>
             <Space width={30} />
-            <Image
-              source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png',
-              }}
-              width={40}
-              height={40}
-              style={{ width: 50, height: 50 }}
-            />
+            <TouchableOpacity onPress={loginWithFacebook}>
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png',
+                }}
+                width={40}
+                height={40}
+                style={{ width: 50, height: 50 }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.textFooter}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('RegisterScreen')}
+          >
+            <Text style={{ fontSize: 15 }}>No account yet? Register</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-      <View style={styles.textFooter}>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-          <Text style={{ fontSize: 15 }}>No account yet? Register</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -167,6 +259,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#d9d5d4',
     borderRadius: 40,
+  },
+  field: {
     marginBottom: '5%',
   },
   inputPass: {
@@ -179,9 +273,9 @@ const styles = StyleSheet.create({
     color: '#111111',
   },
   textFooter: {
-    marginBottom: 60,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 50,
   },
   textOr: {
     alignItems: 'center',
@@ -198,6 +292,7 @@ const styles = StyleSheet.create({
   err: {
     color: 'red',
     paddingLeft: 10,
+    fontWeight: 'bold',
   },
   or: {
     fontSize: 17,
@@ -206,5 +301,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  notification: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  txtWar: {
+    color: 'yellow',
+    fontSize: 17,
+    fontWeight: 'bold',
   },
 });

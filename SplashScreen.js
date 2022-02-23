@@ -8,7 +8,7 @@ const SplashScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Image
         source={{
-          uri: 'https://moitruong.maiphy.net/wp-content/uploads/2018/06/logo-1.png',
+          uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
         }}
         width={40}
         height={40}

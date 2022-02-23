@@ -4,25 +4,21 @@ import React, { useEffect, useState } from 'react';
 import AuthStackScreen from './AuthStacks';
 import HomeTab from './HomeTab';
 import { createStackNavigator } from '@react-navigation/stack';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../firebase';
 const AppStack = createStackNavigator();
 export default function Main() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  onAuthStateChanged(auth, (user) => {
+    if (user != null) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  });
   return (
     <NavigationContainer>
-      <AppStack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#fff',
-          },
-          headerShown: false,
-          headerTintColor: '#000000',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <AppStack.Screen name="AuthScreen" component={AuthStackScreen} />
-        <AppStack.Screen name="HomeTab" component={HomeTab} />
-      </AppStack.Navigator>
+      {isLoggedIn ? <HomeTab /> : <AuthStackScreen />}
     </NavigationContainer>
   );
 }

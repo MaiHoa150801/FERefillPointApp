@@ -9,26 +9,73 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { useState, useContext } from 'react';
 import Btn from '../../components/Button';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../../firebase';
+import { Image } from 'react-native';
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState(null);
-
+  const [err, setErr] = useState(null);
   const [modalhiden, setModalhiden] = useState(false);
 
-  const onSubmit = async () => {};
+  const forgotPassword = async () => {
+    if (email) {
+      try {
+        await sendPasswordResetEmail(auth, email).then((e) => {
+          setModalhiden(true);
+        });
+      } catch (error) {
+        setErr('Email does not exist!');
+      }
+    } else {
+      setErr('Email is required!');
+    }
+  };
 
   return (
     <View style={styles.container}>
+      <View style={{ alignItems: 'center' }}>
+        <Image
+          source={{
+            uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
+          }}
+          width={200}
+          height={200}
+          style={{ width: 200, height: 200 }}
+        />
+      </View>
+      <Text style={styles.textInputTitle}> Email</Text>
+      <View style={styles.input}>
+        <TextInput
+          style={styles.textInput}
+          value={email}
+          onChangeText={setEmail}
+          placeholder=" Enter your email"
+        />
+      </View>
+      <Text style={styles.txtErr}>{err}</Text>
+      <Btn
+        text="Get Reset Link"
+        textStyle={styles.textStyle}
+        onPress={forgotPassword}
+        style={styles.btnLogin}
+      />
       <Modal
         animationType="fade"
         visible={modalhiden}
         onRequestClose={() => setModalhiden(false)}
+        transparent={true}
       >
         <View style={styles.viewModel}>
           <View style={styles.viewModelContent}>
             <View style={{ alignItems: 'center' }}>
-              <View style={styles.checkView}>
-                <AntDesign name="checkcircle" size={35} color="#27C754" />
-              </View>
+              <Image
+                width={100}
+                height={100}
+                style={{ width: 100, height: 100 }}
+                source={{
+                  uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
+                }}
+              />
               <Text style={styles.successText}>Success</Text>
               <Text
                 style={{
@@ -37,7 +84,7 @@ export default function ForgotPasswordScreen() {
                   lineHeight: 25,
                 }}
               >
-                Reset link has been sent to “goodstartearlylearning@gmail.com”
+                Reset link has been sent to {email}
               </Text>
             </View>
             <TouchableOpacity
@@ -49,22 +96,6 @@ export default function ForgotPasswordScreen() {
           </View>
         </View>
       </Modal>
-      <Text style={styles.textInputTitle}> Email</Text>
-      <View style={styles.input}>
-        <TextInput
-          style={styles.textInput}
-          value={email}
-          autoCapitalize={false}
-          onChangeText={setEmail}
-          placeholder=" Enter your email"
-        />
-      </View>
-      <Btn
-        text="Get Reset Link"
-        textStyle={styles.textStyle}
-        onPress={onSubmit}
-        style={styles.btnLogin}
-      />
     </View>
   );
 }
@@ -72,6 +103,7 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 25,
+    flex: 1,
   },
   title: {
     fontWeight: '700',
@@ -86,7 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#d9d5d4',
     borderRadius: 10,
-    marginBottom: '5%',
+    marginBottom: 5,
   },
   textStyle: {
     color: '#ffffff',
@@ -102,18 +134,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   viewModel: {
-    backgroundColor: 'grey',
+    position: 'relative',
+    backgroundColor: 'rgba(52, 52, 52, 0.5)',
     flex: 1,
     justifyContent: 'center',
+    borderColor: 'red',
     alignItems: 'center',
   },
   viewModelContent: {
     backgroundColor: 'white',
-    height: '40%',
-    width: '80%',
+    height: '35%',
+    width: '60%',
+    borderColor: '#9900CC',
+    borderWidth: 3,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    position: 'absolute',
   },
   checkView: {
     backgroundColor: '#92E2A952',
@@ -129,7 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonOK: {
-    backgroundColor: '#DB147F',
+    backgroundColor: '#9900CC',
     padding: 15,
     borderRadius: 10,
     width: '85%',
@@ -138,5 +175,9 @@ const styles = StyleSheet.create({
   },
   textInputTitle: {
     fontSize: 15,
+  },
+  txtErr: {
+    color: 'red',
+    fontWeight: 'bold',
   },
 });
