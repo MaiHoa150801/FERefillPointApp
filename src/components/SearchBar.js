@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-} from 'react-native';
+} from "react-native";
 
 export default function Searchbar({ value, updateSearch, style, textSearch }) {
   const [query, setQuery] = useState();
@@ -17,7 +17,7 @@ export default function Searchbar({ value, updateSearch, style, textSearch }) {
         <View style={styles.vwSearch}>
           <Image
             style={styles.icSearch}
-            source={require('../../assets/ic_search.png')}
+            source={require("../../assets/ic_search.png")}
           />
         </View>
 
@@ -27,22 +27,22 @@ export default function Searchbar({ value, updateSearch, style, textSearch }) {
           style={styles.textInput}
           onChangeText={(text) => {
             var letters = /^$|^[a-zA-Z._\b ]+$/;
-            if (text.length > 12) setError('Query too long.');
+            if (text.length > 12) setError("Query too long.");
             else if (text.match(letters)) {
               setQuery(text);
               updateSearch(text);
               if (error) setError(false);
-            } else setError('Please only enter alphabets');
+            } else setError("Please only enter alphabets");
           }}
         />
         {query ? (
           <TouchableOpacity
-            onPress={() => updateSearch('')}
+            onPress={() => updateSearch("")}
             style={styles.vwClear}
           >
             <Image
               style={styles.icClear}
-              source={require('../../assets/ic_clear.png')}
+              source={require("../../assets/ic_clear.png")}
             />
           </TouchableOpacity>
         ) : (
@@ -54,14 +54,14 @@ export default function Searchbar({ value, updateSearch, style, textSearch }) {
 }
 const styles = StyleSheet.create({
   txtError: {
-    marginTop: '2%',
-    width: '89%',
-    color: 'red',
+    marginTop: "2%",
+    width: "89%",
+    color: "red",
   },
   vwClear: {
     flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   textInput: {
     // backgroundColor: 'green',
@@ -70,22 +70,22 @@ const styles = StyleSheet.create({
 
   vwSearch: {
     flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   icSearch: {
     height: 20,
     width: 20,
   },
   searchContainer: {
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
     height: 50,
-    flexDirection: 'row',
+    flexDirection: "row",
     borderRadius: 10,
   },
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 0,
     // borderWidth: 1,
   },
