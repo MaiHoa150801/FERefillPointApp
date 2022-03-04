@@ -1,12 +1,12 @@
-import { StyleSheet, Text, TextInput, View, Alert } from 'react-native';
-import Btn from '../../components/Button';
-import { useState } from 'react';
-import AnimatedLoader from 'react-native-animated-loader';
-import { ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Image } from 'react-native';
-import Space from '../../components/Space';
+import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
+import Btn from "../../components/Button";
+import { useState } from "react";
+import AnimatedLoader from "react-native-animated-loader";
+import { ScrollView } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Image } from "react-native";
+import Space from "../../components/Space";
 
 export default function LoginScreen({ navigation, reloadApp }) {
   const [visible, setVisible] = useState(false);
@@ -17,32 +17,32 @@ export default function LoginScreen({ navigation, reloadApp }) {
 
   const checkError = (err) => {
     switch (err) {
-      case 'auth/missing-email':
-        setErrors('Email is required');
+      case "auth/missing-email":
+        setErrors("Email is required");
         break;
-      case 'auth/invalid-email':
-        setErrors('Invalid email');
+      case "auth/invalid-email":
+        setErrors("Invalid email");
         break;
-      case 'auth/internal-error':
-        setErrors('Password is required');
+      case "auth/internal-error":
+        setErrors("Password is required");
         break;
-      case 'auth/user-not-found':
-        setErrors('User not found');
+      case "auth/user-not-found":
+        setErrors("User not found");
         break;
-      case 'auth/wrong-password':
-        setErrors('Incorrect password');
+      case "auth/wrong-password":
+        setErrors("Incorrect password");
         break;
       default:
         break;
     }
   };
   const onSubmit = async () => {
-    navigation.navigate('HomeTab');
+    navigation.navigate("HomeTab");
   };
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
@@ -79,7 +79,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
           </View>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ForgotScreen')}
+              onPress={() => navigation.navigate("ForgotScreen")}
             >
               <Text style={styles.textForgor}>Forgot password?</Text>
             </TouchableOpacity>
@@ -97,7 +97,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
           <View style={styles.row}>
             <Image
               source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png',
+                uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png",
               }}
               width={40}
               height={40}
@@ -106,7 +106,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
             <Space width={30} />
             <Image
               source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png',
+                uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png",
               }}
               width={40}
               height={40}
@@ -116,7 +116,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
         </View>
       </ScrollView>
       <View style={styles.textFooter}>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
           <Text style={{ fontSize: 15 }}>No account yet? Register</Text>
         </TouchableOpacity>
       </View>
@@ -127,84 +127,84 @@ export default function LoginScreen({ navigation, reloadApp }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   content: {
-    width: '90%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    width: "90%",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   textStyle: {
-    color: '#ffffff',
-    textAlign: 'center',
+    color: "#ffffff",
+    textAlign: "center",
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   btnLogin: {
-    backgroundColor: '#3366CC',
+    backgroundColor: "#3366CC",
     padding: 15,
     borderRadius: 10,
-    width: '100%',
+    width: "100%",
     marginTop: 20,
   },
   divider: {
     margin: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   textInput: {
-    width: '100%',
+    width: "100%",
     padding: 10,
   },
   form: {
-    width: '100%',
+    width: "100%",
   },
   input: {
     padding: 5,
     borderWidth: 1,
-    borderColor: '#d9d5d4',
+    borderColor: "#d9d5d4",
     borderRadius: 40,
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   inputPass: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
   },
   textForgor: {
-    textAlign: 'right',
-    color: '#111111',
+    textAlign: "right",
+    color: "#111111",
   },
   textFooter: {
     marginBottom: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   textOr: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 30,
     marginTop: 25,
   },
   txt: {
-    color: 'black',
-    textAlign: 'center',
+    color: "black",
+    textAlign: "center",
     margin: 2,
     fontSize: 15,
   },
   err: {
-    color: 'red',
+    color: "red",
     paddingLeft: 10,
   },
   or: {
     fontSize: 17,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
