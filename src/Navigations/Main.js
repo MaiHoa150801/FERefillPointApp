@@ -3,10 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import AuthStackScreen from './AuthStacks';
 import HomeTab from './HomeTab';
-import { createStackNavigator } from '@react-navigation/stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
-const AppStack = createStackNavigator();
 export default function Main() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   onAuthStateChanged(auth, (user) => {

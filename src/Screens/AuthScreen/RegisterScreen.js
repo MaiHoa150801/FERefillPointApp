@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnLogin: {
-    backgroundColor: '#3366CC',
+    backgroundColor: 'rgb(18, 136, 58)',
     padding: 15,
     borderRadius: 5,
     width: '100%',

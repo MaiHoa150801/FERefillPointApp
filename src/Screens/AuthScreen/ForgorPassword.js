@@ -7,30 +7,30 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import * as Yup from 'yup';
 import { useState, useContext } from 'react';
 import Btn from '../../components/Button';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import { Image } from 'react-native';
-export default function ForgotPasswordScreen() {
-  const [email, setEmail] = useState(null);
-  const [err, setErr] = useState(null);
+import { Formik } from 'formik';
+export default function ForgotPasswordScreen({ navigation }) {
   const [modalhiden, setModalhiden] = useState(false);
-
-  const forgotPassword = async () => {
-    if (email) {
-      try {
-        await sendPasswordResetEmail(auth, email).then((e) => {
-          setModalhiden(true);
-        });
-      } catch (error) {
-        setErr('Email does not exist!');
-      }
-    } else {
-      setErr('Email is required!');
+  const [email, setEmail] = useState(null);
+  const forgotPassword = async (data) => {
+    const { email: emailForgot } = data;
+    try {
+      await sendPasswordResetEmail(auth, emailForgot).then((e) => {
+        setEmail(emailForgot);
+        setModalhiden(true);
+      });
+    } catch (error) {
+      setErr('Email does not exist!');
     }
   };
-
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid Email!').required('Email is required!'),
+  });
   return (
     <View style={styles.container}>
       <View style={{ alignItems: 'center' }}>
@@ -43,22 +43,38 @@ export default function ForgotPasswordScreen() {
           style={{ width: 200, height: 200 }}
         />
       </View>
-      <Text style={styles.textInputTitle}> Email</Text>
-      <View style={styles.input}>
-        <TextInput
-          style={styles.textInput}
-          value={email}
-          onChangeText={setEmail}
-          placeholder=" Enter your email"
-        />
-      </View>
-      <Text style={styles.txtErr}>{err}</Text>
-      <Btn
-        text="Get Reset Link"
-        textStyle={styles.textStyle}
-        onPress={forgotPassword}
-        style={styles.btnLogin}
-      />
+      <Formik
+        initialValues={{ email: '' }}
+        validationSchema={validationSchema}
+        onSubmit={(values, formikActions) => {
+          forgotPassword(values);
+        }}
+      >
+        {(props) => (
+          <>
+            <Text style={styles.textInputTitle}> Email</Text>
+            <View style={styles.input}>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={props.handleChange('email')}
+                onBlur={props.handleBlur('email')}
+                value={props.values.email}
+                placeholder=" Enter your email"
+              />
+            </View>
+            {props.touched.email && props.errors.email ? (
+              <Text style={styles.txtErr}>{props.errors.email}</Text>
+            ) : null}
+            <Btn
+              text="Get Reset Link"
+              textStyle={styles.textStyle}
+              onPress={props.handleSubmit}
+              style={styles.btnLogin}
+            />
+          </>
+        )}
+      </Formik>
+
       <Modal
         animationType="fade"
         visible={modalhiden}
@@ -89,7 +105,10 @@ export default function ForgotPasswordScreen() {
             </View>
             <TouchableOpacity
               style={styles.buttonOK}
-              onPress={() => setModalhiden(false)}
+              onPress={() => {
+                setModalhiden(false);
+                navigation.navigate('LoginScreen');
+              }}
             >
               <Text style={{ fontWeight: 'bold', color: 'white' }}>OK</Text>
             </TouchableOpacity>
@@ -103,6 +122,7 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 25,
+    backgroundColor: 'white',
     flex: 1,
   },
   title: {
@@ -127,7 +147,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   btnLogin: {
-    backgroundColor: '#3366CC',
+    backgroundColor: 'rgb(18, 136, 58)',
     padding: 15,
     borderRadius: 10,
     width: '100%',
@@ -145,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: '35%',
     width: '60%',
-    borderColor: '#9900CC',
+    borderColor: 'rgb(18, 136, 58)',
     borderWidth: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -166,7 +186,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonOK: {
-    backgroundColor: '#9900CC',
+    backgroundColor: 'rgb(18, 136, 58)',
     padding: 15,
     borderRadius: 10,
     width: '85%',

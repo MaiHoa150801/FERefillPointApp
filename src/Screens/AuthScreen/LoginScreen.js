@@ -124,7 +124,6 @@ export default function LoginScreen({ navigation, reloadApp }) {
                         style={styles.textInput}
                         onChangeText={props.handleChange('email')}
                         onBlur={props.handleBlur('email')}
-                        autoFocus
                         value={props.values.email}
                         placeholder="Email"
                       />
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
   },
 
   btnLogin: {
-    backgroundColor: '#3366CC',
+    backgroundColor: 'rgb(18, 136, 58)',
     padding: 15,
     borderRadius: 10,
     width: '100%',

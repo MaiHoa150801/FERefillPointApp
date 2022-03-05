@@ -5,9 +5,13 @@ import Btn from './Button';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { useRef } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
-const BottomModal = (props) => {
-  const { visible, onBackButtonPress, onBackdropPress, title, children } =
-    props;
+const BottomModal = ({
+  visible,
+  onBackButtonPress,
+  onBackdropPress,
+  title,
+  children,
+}) => {
   return (
     <BottomSheet
       visible={visible}
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     width: '100%',
     backgroundColor: 'white',
-    height: '80%',
+    height: '50%',
   },
   modalContainer: {
     width: '94%',

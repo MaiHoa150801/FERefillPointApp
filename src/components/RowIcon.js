@@ -1,13 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { StyleSheet, View } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../global/styles';
-export default function RowIcon(props) {
-  const { icon, text, style } = props;
+export default function RowIcon({ icon, text, style }) {
   return (
     <View style={[styles.row, style]}>
-      <FontAwesome5 name={icon} size={20} style={styles.icon} />
+      <FontAwesome name={icon} size={20} style={styles.icon} />
       <Text style={styles.description}>{text}</Text>
     </View>
   );

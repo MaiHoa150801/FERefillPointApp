@@ -2,19 +2,15 @@ import React from 'react';
 import { StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { View } from 'react-native';
 import { Modal } from 'react-native';
-import { Text } from 'react-native-elements';
-import { Divider } from 'react-native-elements/dist/divider/Divider';
-import Btn from './Button';
-export default function ModalBottom(props) {
-  const {
-    setModalVisible,
-    modalVisible,
-    children,
-    title,
-    closeIcon,
-    height,
-    closeRightIcon,
-  } = props;
+export default function ModalBottom({
+  setModalVisible,
+  modalVisible,
+  children,
+  title,
+  closeIcon,
+  height,
+  closeRightIcon,
+}) {
   return (
     <Modal
       animationType="slide"
@@ -23,32 +19,14 @@ export default function ModalBottom(props) {
       onRequestClose={() => setModalVisible(false)}
     >
       <View style={styles.centeredView}>
-        <TouchableNativeFeedback onPress={() => setModalVisible(false)}>
+        <TouchableNativeFeedback
+          onPress={() => setModalVisible()}
+          touchSoundDisabled={true}
+        >
           <View style={styles.viewTouch} />
         </TouchableNativeFeedback>
         <View style={[styles.modalView, { height: height }]}>
-          <View style={styles.modalContainer}>
-            <View style={styles.row}>
-              {closeIcon && (
-                <Btn
-                  text="x"
-                  textStyle={{ fontSize: 20 }}
-                  onPress={() => setModalVisible(false)}
-                />
-              )}
-
-              <Text style={styles.title}>{title}</Text>
-              {closeRightIcon && (
-                <Btn
-                  text="x"
-                  textStyle={{ fontSize: 30 }}
-                  onPress={() => setModalVisible(false)}
-                />
-              )}
-            </View>
-            <Divider style={styles.divider} />
-            {children}
-          </View>
+          <View style={styles.modalContainer}>{children}</View>
         </View>
       </View>
     </Modal>
@@ -59,13 +37,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#000000AA',
   },
   modalView: {
     width: '100%',
     backgroundColor: 'white',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopColor: '#CCCCCC',
+    borderTopWidth: 2,
     padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
@@ -73,7 +50,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 3,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.9,
     shadowRadius: 4,
     elevation: 5,
   },
@@ -101,5 +78,6 @@ const styles = StyleSheet.create({
   viewTouch: {
     flex: 1,
     width: '100%',
+    backgroundColor: 'transparent',
   },
 });

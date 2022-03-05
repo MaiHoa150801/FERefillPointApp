@@ -15,10 +15,11 @@ const HomeTab = (props) => {
         tabBarStyle: [{ display: 'flex' }, null],
       }}
     >
-      {bottomRoutes.map((e) => {
+      {bottomRoutes.map((e, index) => {
         const { name, component, title, icon } = e;
         return (
           <HomeTabs.Screen
+            key={index}
             name={name}
             component={component}
             options={{
@@ -26,7 +27,7 @@ const HomeTab = (props) => {
               tabBarLabel: ({ color, size, focused }) => (
                 <Text
                   style={{
-                    color: focused ? '#3333FF' : colors.grey2,
+                    color: focused ? 'rgb(18, 136, 58)' : colors.grey2,
                     fontSize: 13,
                     fontWeight: focused ? 'bold' : 'normal',
                   }}
@@ -38,7 +39,7 @@ const HomeTab = (props) => {
                 <FontAwesome5
                   name={icon}
                   size={size}
-                  color={focused ? '#3333FF' : colors.grey2}
+                  color={focused ? 'rgb(18, 136, 58)' : colors.grey2}
                 />
               ),
             }}
