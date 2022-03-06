@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo } from "@expo/vector-icons";
-
+import AutoScroll from "@homielab/react-native-auto-scroll";
 export default function IntroduceRefill() {
   return (
     <View style={styles.container}>
@@ -25,11 +25,15 @@ export default function IntroduceRefill() {
           />
           <View style={styles.line}></View>
         </View>
-        <Text style={styles.textTitle}>THIẾT LÝ HOẠT ĐỘNG</Text>
+
+        <AutoScroll>
+          <Text style={styles.textTitle}>THIẾT LÝ HOẠT ĐỘNG</Text>
+        </AutoScroll>
         <View style={styles.line2}>
           <View style={styles.line1}></View>
           <View style={styles.line1}></View>
         </View>
+
         <Text style={styles.text1}>
           Chúng tôi tin rằng sự ghi nhận và tri ân cộng đồng là động lực khuyến
           khích mỗi cá nhân xanh hơn 1% mỗi ngày.
