@@ -4,6 +4,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ChangePassword from "../Screens/SettingScreen/ChangePassword";
 import Profile from "../Screens/SettingScreen/Profile";
 import SettingScreen from "../Screens/SettingScreen";
+import IntroduceRefill from "../Screens/SettingScreen/IntroduceRefill";
+import GreenGift from "../Screens/SettingScreen/GreenGift";
 const SettingStack = createStackNavigator();
 
 const SettingStackScreen = () => (
@@ -36,6 +38,20 @@ const SettingStackScreen = () => (
       component={Profile}
       options={{
         title: "Profile",
+      }}
+    />
+    <SettingStack.Screen
+      name="GreenGift"
+      component={GreenGift}
+      options={{
+        title: "Green Gift",
+      }}
+    />
+    <SettingStack.Screen
+      name="IntroduceRefill"
+      component={IntroduceRefill}
+      options={{
+        title: "Introduce Refill",
       }}
     />
   </SettingStack.Navigator>

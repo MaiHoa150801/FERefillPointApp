@@ -4,7 +4,52 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Btn from "../components/Button";
 import { FontAwesome, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { colors } from "../global/styles";
-
+export const posts = [
+  {
+    id: 1,
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiRlWgTVuvIaj0yHXM0WuV8pzme76jwhUAng&usqp=CAU",
+    name: "Lê Ngọc Vĩ",
+    description: "haha",
+    image:
+      "https://media-cdn.tripadvisor.com/media/photo-s/15/c5/84/65/khong-gian-nha-hang-vu.jpg",
+    like: 550,
+    share: 10,
+  },
+  {
+    id: 2,
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiRlWgTVuvIaj0yHXM0WuV8pzme76jwhUAng&usqp=CAU",
+    name: "Lê Ngọc Vĩ",
+    description: "haha",
+    image:
+      "https://media-cdn.tripadvisor.com/media/photo-s/15/c5/84/65/khong-gian-nha-hang-vu.jpg",
+    like: 550,
+    share: 10,
+  },
+  {
+    id: 3,
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiRlWgTVuvIaj0yHXM0WuV8pzme76jwhUAng&usqp=CAU",
+    name: "Lê Ngọc Vĩ",
+    description: "haha",
+    image:
+      "https://media-cdn.tripadvisor.com/media/photo-s/15/c5/84/65/khong-gian-nha-hang-vu.jpg",
+    like: 550,
+    share: 10,
+  },
+  {
+    id: 4,
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiRlWgTVuvIaj0yHXM0WuV8pzme76jwhUAng&usqp=CAU",
+    name: "Lê Ngọc Vĩ",
+    description: "haha",
+    image:
+      "https://media-cdn.tripadvisor.com/media/photo-s/15/c5/84/65/khong-gian-nha-hang-vu.jpg",
+    like: 550,
+    share: 10,
+  },
+];
 export default function GreenComunity({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
@@ -18,53 +63,56 @@ export default function GreenComunity({ navigation }) {
         />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.greenComunity}>
-          <View style={{ flexDirection: "row" }}>
-            <FontAwesome
-              style={styles.iconComunity}
-              name="user-circle-o"
-              size={25}
-            />
-            <Text style={styles.name}>Lê Ngọc Vĩ</Text>
-          </View>
-          <Text>
-            Browse to node_modules/react-native-vector-icons and drag the folder
-            Fonts (or just the ones you want) to your project in Xcode. Make
-            sure your app is checked
-          </Text>
-          <Image
-            style={styles.tinyLogo}
-            source={{
-              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStXScZh9DbfNTojRxiP9lljH9LDqtL4TB-EQ&usqp=CAU",
-            }}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 30,
-              marginTop: 15,
-            }}
-          >
+        {posts.map((post, index) => (
+          <View style={styles.greenComunity} key={index}>
             <View style={{ flexDirection: "row" }}>
-              <AntDesign style={{ marginRight: 10 }} name="like1" size={20} />
-              <Text style={styles.text1}>Like</Text>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <FontAwesome5
-                style={{ marginRight: 10 }}
-                name="comment"
-                size={20}
+              <Image
+                style={{ width: 30, height: 30, marginRight: 10 }}
+                source={{
+                  uri: post.avatar,
+                }}
               />
-              <Text style={styles.text1}>Comment</Text>
+              <Text style={styles.name}>{post.name}</Text>
             </View>
-            <View style={{ flexDirection: "row" }}>
-              <FontAwesome style={{ marginRight: 10 }} name="share" size={20} />
-              <Text style={styles.text1}>Share</Text>
+            <Text>{post.description}</Text>
+            <Image
+              style={styles.tinyLogo}
+              source={{
+                uri: post.image,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginRight: 30,
+                marginTop: 15,
+              }}
+            >
+              <View style={{ flexDirection: "row" }}>
+                <AntDesign style={{ marginRight: 10 }} name="like1" size={20} />
+                <Text style={styles.text1}>Like</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome5
+                  style={{ marginRight: 10 }}
+                  name="comment"
+                  size={20}
+                />
+                <Text style={styles.text1}>Comment</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome
+                  style={{ marginRight: 10 }}
+                  name="share"
+                  size={20}
+                />
+                <Text style={styles.text1}>Share</Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={{ marginLeft: 20, marginBottom: 20 }}>
+        ))}
+        {/* <View style={{ marginLeft: 20, marginBottom: 20 }}>
           <View style={{ flexDirection: "row" }}>
             <FontAwesome
               style={{ marginRight: 20 }}
@@ -159,7 +207,7 @@ export default function GreenComunity({ navigation }) {
               <Text style={styles.text1}>Share</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

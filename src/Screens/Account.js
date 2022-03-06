@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import { posts } from "./GreenComunity";
 import { FontAwesome, FontAwesome5, AntDesign } from "@expo/vector-icons";
 
 export default function Account({ navigation }) {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View>
         <TouchableOpacity
           style={styles.header}
@@ -102,50 +103,60 @@ const Post = () => (
     // persistentScrollbar={true}
     // horizontal={true}
     contentContainerStyle={styles.contentContainer}
+    style={{ flex: 0 }}
   >
-    <View style={{ marginLeft: 20, marginBottom: 20, backgroundColor: "#eee" }}>
-      <View style={{ flexDirection: "row" }}>
-        <FontAwesome
-          style={{ marginRight: 20 }}
-          name="user-circle-o"
-          size={25}
-        />
-        <Text style={styles.text1}>Lê Ngọc Vĩ</Text>
-      </View>
-      <Text>
-        Browse to node_modules/react-native-vector-icons and drag the folder
-        Fonts (or just the ones you want) to your project in Xcode. Make sure
-        your app is checked
-      </Text>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStXScZh9DbfNTojRxiP9lljH9LDqtL4TB-EQ&usqp=CAU",
-        }}
-      />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginRight: 30,
-          marginTop: 15,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <AntDesign style={{ marginRight: 10 }} name="like1" size={25} />
-          <Text style={styles.text1}>Like</Text>
+    <View>
+      {posts.map((post1, index) => (
+        <View
+          style={{ marginLeft: 20, marginBottom: 20, backgroundColor: "#eee" }}
+          key={index}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <Image
+              style={{ width: 30, height: 30, marginRight: 10 }}
+              source={{
+                uri: post1.avatar,
+              }}
+            />
+            <Text style={styles.text1}>{post1.name}</Text>
+          </View>
+          <Text>{post1.description}</Text>
+          <Image
+            style={styles.tinyLogo}
+            source={{
+              uri: post1.image,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 30,
+              marginTop: 15,
+            }}
+          >
+            <View style={{ flexDirection: "row" }}>
+              <AntDesign style={{ marginRight: 10 }} name="like1" size={25} />
+              <Text style={styles.text1}>Like</Text>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <FontAwesome5
+                style={{ marginRight: 10 }}
+                name="comment"
+                size={25}
+              />
+              <Text style={styles.text1}>Comment</Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <FontAwesome style={{ marginRight: 10 }} name="share" size={25} />
+              <Text style={styles.text1}>Share</Text>
+            </View>
+          </View>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <FontAwesome5 style={{ marginRight: 10 }} name="comment" size={25} />
-          <Text style={styles.text1}>Comment</Text>
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <FontAwesome style={{ marginRight: 10 }} name="share" size={25} />
-          <Text style={styles.text1}>Share</Text>
-        </View>
-      </View>
-    </View>
-    <View style={{ marginLeft: 20, marginBottom: 20 }}>
+      ))}
+      {/* <View style={{ marginLeft: 20, marginBottom: 20 }}>
       <View style={{ flexDirection: "row" }}>
         <FontAwesome
           style={{ marginRight: 20 }}
@@ -228,6 +239,7 @@ const Post = () => (
           <Text style={styles.text1}>Share</Text>
         </View>
       </View>
+    </View> */}
     </View>
   </ScrollView>
 );

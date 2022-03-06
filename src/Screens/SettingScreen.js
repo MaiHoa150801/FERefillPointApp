@@ -64,7 +64,7 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("")}
+        onPress={() => navigation.navigate("GreenGift")}
       >
         <Ionicons name="leaf" size={45} color={"#5bc750"} />
         <View style={styles.userName}>
@@ -76,7 +76,7 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("")}
+        onPress={() => navigation.navigate("IntroduceRefill")}
       >
         <Ionicons name="hand-left" size={45} color={"#5bc750"} />
         <View style={styles.userName}>

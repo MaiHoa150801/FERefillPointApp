@@ -125,8 +125,8 @@ const HomeTab = (props) => {
             </Text>
           ),
           tabBarIcon: ({ color, size, focused }) => (
-            <FontAwesome
-              name="ellipsis-h"
+            <FontAwesome5
+              name="spa"
               size={size}
               color={focused ? "#DB147F" : colors.grey2}
             />
