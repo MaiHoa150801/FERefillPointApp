@@ -1,89 +1,132 @@
-import { StyleSheet, Text, View, Image, ImageBackground } from "react-native";
-import { Rating } from "react-native-ratings";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Dimensions,
+} from "react-native";
+import React, { useState } from "react";
 import Line from "../components/Line";
+import Rating from "../components/Rating";
+import AvatarView from "../components/AvatarView";
+import Btn from "../components/Button";
 
 const ProductDetailScreen = () => {
-  const image = {
-    uri: "https://cdn.pixabay.com/photo/2017/04/04/23/54/rush-2203494_960_720.jpg",
+  const width = Dimensions.get("window").width;
+  const height = (width / 100) * 60;
+  const images = [
+    "https://images.pexels.com/photos/10543007/pexels-photo-10543007.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+    "https://images.pexels.com/photos/7013458/pexels-photo-7013458.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "https://images.pexels.com/photos/10323144/pexels-photo-10323144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "https://images.pexels.com/photos/5421792/pexels-photo-5421792.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  ];
+
+  const [active, setActive] = useState(0);
+
+  const change = ({ nativeEvent }) => {
+    const slide = Math.ceil(
+      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+    );
+    if (slide !== active) {
+      setActive(slide);
+    }
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.nameView}>
-        <Image
-          style={styles.productImage}
-          source={{
-            uri: "https://images.unsplash.com/photo-1565573349860-cbf26ef3f40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJvc2UlMjBmbG93ZXJ8ZW58MHx8MHx8&w=1000&q=80",
-          }}
-          resizeMode="cover"
-        />
-        <Text style={styles.nameText}>
-          Refill nước giặt hữu cơ Fuwa3e oragnic sinh học giặc quần áo an toàn
-        </Text>
-        <Text style={styles.price}>10.000đ/100ml</Text>
-        <View style={styles.ratingView}>
-          <Rating
-            style={styles.ratingStyle}
-            type="custom"
-            ratingCount={4}
-            startingValue={4}
-            imageSize={18}
-            readonly={true}
-            ratingColor="#F7C325"
-            tintColor="white"
-          />
-          <Text style={styles.numberSale}>Đã bán 2,2k</Text>
-        </View>
-      </View>
-      <Line height={10} color={"#DFE6ED"} />
-
-      <View style={styles.shopView}>
-        <Image
-          style={styles.avatarStyle}
-          source={{
-            uri: "https://images.unsplash.com/photo-1565573349860-cbf26ef3f40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJvc2UlMjBmbG93ZXJ8ZW58MHx8MHx8&w=1000&q=80",
-          }}
-        />
-        <View style={styles.nameShop}>
-          <Text style={styles.nameText}>Fuwa3E - Chế phẩm sinh học...</Text>
-          <View style={styles.locationView}>
-            <Ionicons name="location-outline" size={17} color={"#0D0A03"} />
-            <Text style={styles.locationText}>Đà Nẵng</Text>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View>
+        <View>
+          <ScrollView
+            horizontal={true}
+            onScroll={change}
+            pagingEnabled
+            showsVerticalScrollIndicator={false}
+          >
+            {images.map((image, index) => (
+              <Image
+                key={index}
+                style={{ width, height, resizeMode: "cover" }}
+                source={{
+                  uri: image,
+                }}
+                resizeMode="cover"
+              />
+            ))}
+          </ScrollView>
+          <View style={styles.pagination}>
+            {images.map((i, k) => (
+              <Text
+                key={k}
+                style={
+                  k == active ? styles.pagingActiveText : styles.pagingText
+                }
+              >
+                ⬤
+              </Text>
+            ))}
           </View>
         </View>
+        <View style={styles.nameProduct}>
+          <Text style={styles.nameText}>
+            Refill nước giặt hữu cơ Fuwa3e oragnic sinh học giặc quần áo an toàn
+          </Text>
+          <Text style={styles.price}>
+            <Text style={styles.money}>10.000 vnd</Text>/100ml
+          </Text>
+          <View style={styles.starView}>{Rating(4)}</View>
+        </View>
       </View>
-
-      <Line height={10} color={"#DFE6ED"} />
-
+      <Line height={10} color={"#F5F5F5"} />
+      <View style={styles.shopView}>
+        <AvatarView
+          star={4}
+          height={30}
+          width={30}
+          color="#293845"
+        ></AvatarView>
+        {/* <Btn
+          text="Lưu"
+          style={styles.saveBtn}
+          textStyle={styles.saveText}
+        ></Btn> */}
+      </View>
+      <Line height={10} color={"#F5F5F5"} />
       <View style={styles.detailView}>
         <Text style={styles.detailText}>Chi tiết sản phẩm</Text>
-        <Line height={2} color={"#9EADBA"} />
-        <Text style={styles.detailText}>Thương hiệu</Text>
-        <Line height={2} color={"#9EADBA"} />
-        <Text>
-          *Thông tin Nước giặt hữu cơ Fuwa3e organic sinh học giặt quần áo, an
-          toàn cho bé Thành phần: -90% là chế phẩm Enzyme sinh học được ngâm ủ
-          và lên men từ vỏ dứa, cam, chanh -10% là các chất hữu cơ tạo bọt lành
-          tính từ thực vật
+        <Line height={2} color={"#F5F5F5"} />
+        <View style={styles.brandView}>
+          <View style={styles.typeView}>
+            <Text style={styles.brandText}>Thương hiệu</Text>
+          </View>
+
+          <Text style={styles.brandName}>Fuwa3e</Text>
+        </View>
+        <View style={styles.brandView}>
+          <View style={styles.typeView}>
+            <Text style={styles.brandText}>Hình thức</Text>
+          </View>
+
+          <Text style={styles.brandName}>Chất lỏng</Text>
+        </View>
+
+        <Line height={2} color={"#F5F5F5"} />
+        <Text style={styles.infoText}>
+          * Thông tin Nước giặt hữu cơ Fuwa3e organic sinh học giặt quần áo, an
+          toàn cho bé {"\n"}
+          {"\n"}Thành phần: {"\n"}- 90% là chế phẩm Enzyme sinh học được ngâm ủ
+          và lên men từ vỏ dứa, cam, chanh {"\n"}- 10% là các chất hữu cơ tạo
+          bọt lành tính từ thực vật
         </Text>
       </View>
-      <Line height={10} color={"#DFE6ED"} />
+
+      <Line height={10} color={"#F5F5F5"} />
       <View style={styles.reviewView}>
-        <Text>ĐÁNH GIÁ SẢN PHẨM</Text>
-        <Rating
-          style={styles.ratingStyle}
-          type="custom"
-          ratingCount={4}
-          startingValue={4}
-          imageSize={18}
-          readonly={true}
-          ratingColor="#F7C325"
-          tintColor="white"
-        />
-        <Line height={2} color={"#9EADBA"} />
+        <Text style={styles.detailText}>ĐÁNH GIÁ SẢN PHẨM</Text>
+        <View style={styles.starView}>{Rating(4)}</View>
+
+        <Line height={2} color={"#F5F5F5"} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -91,55 +134,64 @@ export default ProductDetailScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "white",
-    // paddingLeft: 17,
+    backgroundColor: "#fff",
   },
-  nameView: {
-    marginBottom: -150,
+  pagination: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 0,
+    alignSelf: "center",
   },
-  productImage: {
-    width: "100%",
-    height: "50%",
-    // marginLeft: "auto",
-  },
-  nameText: {
-    padding: 7,
+  pagingText: { color: "#888", margin: 3 },
+  pagingActiveText: { color: "#fff", margin: 3 },
+  nameProduct: {
+    padding: 10,
   },
   price: {
-    color: "#E8833A",
-    fontWeight: "700",
-    padding: 7,
-    marginTop: -7,
+    padding: 10,
     paddingBottom: 7,
     fontSize: 17,
   },
-  ratingStyle: {
-    // paddingLeft: 7,
+  money: { color: "#E8833A", fontWeight: "700" },
+  detailText: {
+    fontWeight: "700",
+    padding: 10,
   },
-  ratingView: {
+  brandText: {
+    padding: 10,
+  },
+  typeText: {
+    padding: 10,
+  },
+  brandView: {
     flexDirection: "row",
-    marginRight: "auto",
-    paddingLeft: 7,
   },
-  numberSale: {
-    paddingLeft: 7,
+  brandName: {
+    padding: 10,
   },
-
-  avatarStyle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+  typeView: {
+    width: 100,
+  },
+  infoText: {
+    padding: 10,
+    lineHeight: 18,
+  },
+  starView: {
+    flexDirection: "row",
+    paddingLeft: 10,
   },
   shopView: {
     flexDirection: "row",
-    padding: 16,
   },
-  nameShop: {
-    marginLeft: 7,
+  saveText: {
+    // padding: 5,
+    // paddingHorizontal: 10,
+    color: "#E8833A",
+    fontWeight: "700",
+    borderRadius: 3,
   },
-  locationView: {
-    flexDirection: "row",
-    paddingLeft: 3,
+  saveBtn: {
+    borderColor: "#C3CFD9",
+    borderWidth: 1,
   },
 });

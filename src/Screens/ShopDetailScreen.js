@@ -10,127 +10,160 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Rating } from "react-native-ratings";
+
 import Btn from "../components/Button";
 
 import Searchbar from "../components/SearchBar";
+import AvatarView from "../components/AvatarView";
+import ProductCard from "../components/cards/ProductCard";
+import Rating from "../components/Rating";
 const ShopDetailScreen = () => {
   const navigation = useNavigation();
   const image = {
-    uri: "https://cdn.pixabay.com/photo/2017/04/04/23/54/rush-2203494_960_720.jpg",
+    uri: "https://fuwa.com.vn/wp-content/uploads/2020/06/ALL-1024x661.jpg",
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <TouchableOpacity onPress={() => navigation.navigate("GreenMap")}>
-          <Ionicons name="arrow-back" size={19} color={"#0D0A03"} />
-        </TouchableOpacity>
-        <Searchbar textSearch={"Search"} style={styles.searchBar}></Searchbar>
-        <View style={styles.avatarView}>
-          <Image
-            style={styles.avatarStyle}
-            source={{
-              uri: "https://images.unsplash.com/photo-1565573349860-cbf26ef3f40f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJvc2UlMjBmbG93ZXJ8ZW58MHx8MHx8&w=1000&q=80",
-            }}
-          />
-          <View style={styles.nameShop}>
-            <Text style={styles.nameText}>Fuwa3E - Chế phẩm sinh học...</Text>
-            <View style={styles.ratingView}>
-              <Rating
-                type="custom"
-                ratingCount={4}
-                startingValue={4}
-                imageSize={18}
-                readonly={true}
-                ratingColor="#F7C325"
-                tintColor="white"
+        <View style={styles.overlayView}>
+          <View style={styles.searchView}>
+            <TouchableOpacity onPress={() => navigation.navigate("GreenMap")}>
+              <Ionicons
+                name="arrow-back"
+                size={23}
+                color={"#ffff"}
+                style={styles.icon}
               />
-            </View>
+            </TouchableOpacity>
+            <Searchbar
+              textSearch={"Search"}
+              style={styles.searchBar}
+            ></Searchbar>
+          </View>
+          {/* {star ? (
+          Rating(star)
+        ) : (
+          <View style={styles.locationView}>
+            <Ionicons name="location-outline" size={17} color={"#0D0A03"} />
+            <Text style={styles.locationText}>{address}</Text>
+          </View>
+        )} */}
+          <View style={styles.avatarView}>
+            <AvatarView
+              star={4}
+              height={40}
+              width={40}
+              color="#ffff"
+            ></AvatarView>
           </View>
         </View>
       </ImageBackground>
-      <Text style={styles.voucherText}>Voucher</Text>
-      <View style={styles.voucherView}>
-        <View style={styles.voucherViewLeft}>
-          <Text style={styles.voucherName}>Giảm 15k</Text>
-          <Text style={styles.voucherLimited}>Đơn tổi thiểu 199k</Text>
-          <Text style={styles.voucherExpiry}>HSD: 31.3.2022</Text>
-        </View>
-        <View style={styles.voucherViewRight}>
-          <Btn text="Lưu" style={styles.saveText}></Btn>
-        </View>
-      </View>
-      <Text style={styles.productText}>Sản phẩm</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.productView}>
-          <View style={styles.productItemView}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ProductDetail")}
-            >
-              <Image
-                style={styles.productStyle}
-                source={{
-                  uri: "https://cf.shopee.vn/file/0c24e32e696b0c07d30929fd42f8963c",
-                }}
-                resizeMode="cover"
-              />
-              <Text style={styles.nameProduct}>
-                Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-              </Text>
-              <Text style={styles.price}>10.000đ/100ml</Text>
-            </TouchableOpacity>
+        <Text style={styles.voucherText}>Voucher</Text>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.voucherView}>
+            <View style={styles.voucherViewLeft}>
+              <Text style={styles.voucherName}>Giảm 15k</Text>
+              <Text style={styles.voucherLimited}>Đơn tổi thiểu 199k</Text>
+              <Text style={styles.voucherExpiry}>HSD: 31.3.2022</Text>
+            </View>
+            <View style={styles.voucherViewRight}>
+              <Btn
+                text="Lưu"
+                style={styles.saveBtn}
+                textStyle={styles.saveText}
+              ></Btn>
+            </View>
           </View>
-          <View style={styles.productItemView}>
-            <Image
-              style={styles.productStyle}
-              source={{
-                uri: "https://cf.shopee.vn/file/0c24e32e696b0c07d30929fd42f8963c",
-              }}
-              resizeMode="cover"
-            />
+          <View style={styles.voucherView}>
+            <View style={styles.voucherViewLeft}>
+              <Text style={styles.voucherName}>Giảm 15k</Text>
+              <Text style={styles.voucherLimited}>Đơn tổi thiểu 199k</Text>
+              <Text style={styles.voucherExpiry}>HSD: 31.3.2022</Text>
+            </View>
+            <View style={styles.voucherViewRight}>
+              <Btn
+                text="Lưu"
+                style={styles.saveBtn}
+                textStyle={styles.saveText}
+              ></Btn>
+            </View>
+          </View>
+        </ScrollView>
+        <Text style={styles.productText}>Sản phẩm</Text>
+        <View style={styles.productLists}>
+          <View style={styles.productList}>
+            <View style={styles.productView}>
+              <View style={styles.productItemView}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ProductDetail")}
+                >
+                  <Image
+                    style={styles.productStyle}
+                    source={{
+                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={styles.nameProduct}>
+                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
+                  </Text>
+                  <Text style={styles.price}>10.000đ/100ml</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.productItemView}>
+                <Image
+                  style={styles.productStyle}
+                  source={{
+                    uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
+                  }}
+                  resizeMode="cover"
+                />
 
-            <Text style={styles.nameProduct}>
-              Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-            </Text>
-            <Text style={styles.price}>10.000đ/100ml</Text>
-          </View>
-        </View>
+                <Text style={styles.nameProduct}>
+                  Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
+                </Text>
+                <Text style={styles.price}>10.000đ/100ml</Text>
+              </View>
+            </View>
 
-        <View style={styles.productView}>
-          <View style={styles.productItemView}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ProductDetail")}
-            >
-              <Image
-                style={styles.productStyle}
-                source={{
-                  uri: "https://cf.shopee.vn/file/0c24e32e696b0c07d30929fd42f8963c",
-                }}
-                resizeMode="cover"
-              />
-              <Text style={styles.nameProduct}>
-                Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-              </Text>
-              <Text style={styles.price}>10.000đ/100ml</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.productItemView}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ProductDetail")}
-            >
-              <Image
-                style={styles.productStyle}
-                source={{
-                  uri: "https://cf.shopee.vn/file/0c24e32e696b0c07d30929fd42f8963c",
-                }}
-                resizeMode="cover"
-              />
-              <Text style={styles.nameProduct}>
-                Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-              </Text>
-              <Text style={styles.price}>10.000đ/100ml</Text>
-            </TouchableOpacity>
+            <View style={styles.productView}>
+              <View style={styles.productItemView}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ProductDetail")}
+                >
+                  <Image
+                    style={styles.productStyle}
+                    source={{
+                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={styles.nameProduct}>
+                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
+                  </Text>
+                  <Text style={styles.price}>10.000đ/100ml</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.productItemView}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ProductDetail")}
+                >
+                  <Image
+                    style={styles.productStyle}
+                    source={{
+                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={styles.nameProduct}>
+                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
+                  </Text>
+                  <Text style={styles.price}>10.000đ/100ml</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -144,61 +177,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingLeft: 16,
+    //
   },
-  avatarStyle: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-  },
-  avatarView: {
-    flexDirection: "row",
-    padding: 16,
-  },
-  nameShop: {
-    paddingLeft: 16,
-  },
-  nameText: {
-    fontWeight: "700",
-    color: "black",
+  overlayView: {
+    backgroundColor: "#rgba(179, 153, 255,0.4)",
   },
   voucherText: {
     color: "#E8833A",
     fontWeight: "700",
     fontSize: 17,
     paddingTop: 25,
+    paddingLeft: 16,
   },
   image: {
     marginLeft: -16,
   },
-  searchBar: {
-    paddingTop: 30,
-    paddingLeft: 30,
+  icon: {
+    marginLeft: 32,
+    paddingTop: 16,
   },
-  ratingView: {
-    backgroundColor: "transparent",
+  searchBar: {
+    marginTop: -27,
+    paddingRight: 16,
+    paddingLeft: 66,
   },
   voucherView: {
     flexDirection: "row",
+    paddingLeft: 16,
   },
   voucherViewLeft: {
     padding: 10,
-    borderColor: "#6F7D89",
-    borderWidth: 1,
+    borderColor: "#E8833A",
+    borderWidth: 0.7,
+    backgroundColor: "#fff2e6",
   },
   voucherViewRight: {
-    borderColor: "#6F7D89",
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderRightWidth: 1,
+    borderColor: "#E8833A",
+    borderBottomWidth: 0.7,
+    borderTopWidth: 0.7,
+    borderRightWidth: 0.7,
     padding: 10,
     justifyContent: "center",
+    backgroundColor: "#fff2e6",
+  },
+  saveBtn: {
+    borderRadius: 10,
   },
   saveText: {
     backgroundColor: "#E8833A",
-    padding: 10,
+    padding: 5,
+    paddingHorizontal: 20,
     color: "white",
     fontWeight: "700",
+    borderRadius: 3,
   },
   voucherName: {
     color: "#E8833A",
@@ -218,6 +249,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 17,
     paddingTop: 25,
+    paddingLeft: 16,
+  },
+  productLists: {
+    backgroundColor: "#F5F5F5",
   },
   productView: {
     flex: 1,
@@ -229,13 +264,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 5,
     marginTop: 5,
-    borderColor: "#6F7D89",
-    borderWidth: 1,
+    backgroundColor: "white",
   },
   productStyle: {
     height: "70%",
     width: "100%",
-    borderWidth: 1,
   },
   nameProduct: {
     padding: 7,
@@ -247,5 +280,23 @@ const styles = StyleSheet.create({
     marginTop: -7,
     paddingBottom: 7,
     fontSize: 17,
+  },
+  searchView: {
+    paddingTop: 30,
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  reviewItemStar: {
+    width: 14,
+    height: 14,
+    resizeMode: "contain",
+  },
+  productList: {
+    paddingLeft: 16,
+
+    // flexDirection: "row",
+  },
+  avatarView: {
+    paddingLeft: 16,
   },
 });
