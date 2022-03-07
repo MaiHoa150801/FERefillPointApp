@@ -1,14 +1,9 @@
-import AccountScreen from '../../Screens/AccountScreen';
-import MapScreen from '../../Screens/MapScreen';
-import SocietyGreen from '../../Screens/SocietyGreen';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import HomePageStack from '../HomePageStack';
 import CarouselMap from '../../Screens/HomePageScreen/CarouselMap';
-import { Text } from 'react-native';
-import { colors } from '../../global/styles';
 import GreenComunity from '../../Screens/GreenComunity';
-import Account from '../../Screens/Account';
 import SettingStackScreen from '../SettingStacks';
+import ShopStackNavigator from '../ShopStackNavigatior';
+import RankScreen from '../../Screens/RankScreen';
 const bottomRoutes = [
   {
     name: 'HomeScreen',
@@ -18,7 +13,7 @@ const bottomRoutes = [
   },
   {
     name: 'MapScreen',
-    component: CarouselMap,
+    component: ShopStackNavigator,
     title: 'Bản đồ xanh',
     icon: 'map',
   },
@@ -27,6 +22,12 @@ const bottomRoutes = [
     component: GreenComunity,
     title: 'Cộng đồng xanh',
     icon: 'leaf',
+  },
+  {
+    name: 'RankScreen',
+    component: RankScreen,
+    title: 'Điểm refill',
+    icon: 'spa',
   },
   {
     name: 'AccountStack',

@@ -18,7 +18,7 @@ const dataSource = [
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
 ];
-const ModalMapShop = ({ openModal, closeModal, nameShop }) => {
+const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
   return (
     <ModalBottom
       modalVisible={openModal}
@@ -66,6 +66,7 @@ const ModalMapShop = ({ openModal, closeModal, nameShop }) => {
         <Space width={20} />
         <Btn
           style={styles.buttonView}
+          onPress={() => navigation.navigate('ShopDetail')}
           text="View shop"
           textStyle={styles.txtBtnView}
         />

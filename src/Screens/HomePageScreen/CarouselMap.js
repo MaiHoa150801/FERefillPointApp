@@ -110,7 +110,6 @@ export default class CarouselMap extends Component {
       <Image style={styles.cardImage} source={item.image} />
     </View>
   );
-
   render() {
     return (
       <View style={styles.container}>
@@ -156,6 +155,7 @@ export default class CarouselMap extends Component {
           openModal={this.state.openModal}
           closeModal={() => this.setState({ openModal: false })}
           nameShop="Bacon-Chế phẩm sinh học từ vỏ trái cây"
+          navigation={this.props.navigation}
         />
       </View>
     );

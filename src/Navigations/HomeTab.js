@@ -28,7 +28,7 @@ const HomeTab = (props) => {
                 <Text
                   style={{
                     color: focused ? 'rgb(18, 136, 58)' : colors.grey2,
-                    fontSize: 13,
+                    fontSize: 10,
                     fontWeight: focused ? 'bold' : 'normal',
                   }}
                 >
@@ -38,7 +38,7 @@ const HomeTab = (props) => {
               tabBarIcon: ({ color, size, focused }) => (
                 <FontAwesome5
                   name={icon}
-                  size={size}
+                  size={20}
                   color={focused ? 'rgb(18, 136, 58)' : colors.grey2}
                 />
               ),

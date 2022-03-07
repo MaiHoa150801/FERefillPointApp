@@ -1,7 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
 export default function Line(props) {
-  const { height } = props;
-  return <View style={{ height: height, width: '100%' }} />;
+  const { height, color } = props;
+  return (
+    <View style={{ backgroundColor: color, height: height, width: "100%" }} />
+  );
 }
