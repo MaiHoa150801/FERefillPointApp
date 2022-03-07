@@ -31,7 +31,7 @@ const HeaderHome = () => {
             <Text style={styles.txtTitle}>100RP</Text>
           </View>
           <View style={styles.bell}>
-            <FontAwesome name="bell" size={35} color={colors.grey2} />
+            <FontAwesome name="bell" size={35} color={'#ffffff'} />
           </View>
         </View>
       )}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 20,
     padding: 10,
-    backgroundColor: '#6699FF',
+    backgroundColor: 'rgb(18, 136, 58)',
   },
   image: {
     width: 60,
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     fontSize: 15,
+    color: '#ffffff',
   },
 });
 

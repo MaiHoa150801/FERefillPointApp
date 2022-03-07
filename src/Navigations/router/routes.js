@@ -6,33 +6,15 @@ import HomePageStack from '../HomePageStack';
 import CarouselMap from '../../Screens/HomePageScreen/CarouselMap';
 import { Text } from 'react-native';
 import { colors } from '../../global/styles';
+import GreenComunity from '../../Screens/GreenComunity';
+import Account from '../../Screens/Account';
+import SettingStackScreen from '../SettingStacks';
 const bottomRoutes = [
   {
     name: 'HomeScreen',
     component: HomePageStack,
     title: 'Trang chủ',
     icon: 'home',
-    options: {
-      headerShown: false,
-      tabBarLabel: ({ color, size, focused }) => (
-        <Text
-          style={{
-            color: focused ? 'rgb(18, 136, 58)' : colors.grey2,
-            fontSize: 13,
-            fontWeight: focused ? 'bold' : 'normal',
-          }}
-        >
-          Trang chủ
-        </Text>
-      ),
-      tabBarIcon: ({ color, size, focused }) => (
-        <FontAwesome5
-          name="home"
-          size={size}
-          color={focused ? 'rgb(18, 136, 58)' : colors.grey2}
-        />
-      ),
-    },
   },
   {
     name: 'MapScreen',
@@ -42,13 +24,13 @@ const bottomRoutes = [
   },
   {
     name: 'SocietyScreen',
-    component: SocietyGreen,
+    component: GreenComunity,
     title: 'Cộng đồng xanh',
     icon: 'leaf',
   },
   {
-    name: 'AccountScreen',
-    component: AccountScreen,
+    name: 'AccountStack',
+    component: SettingStackScreen,
     title: 'Tài khoản',
     icon: 'user',
   },

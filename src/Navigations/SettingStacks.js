@@ -1,27 +1,33 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import Icon from "react-native-vector-icons/Ionicons";
-import ChangePassword from "../Screens/SettingScreen/ChangePassword";
-import Profile from "../Screens/SettingScreen/Profile";
-import SettingScreen from "../Screens/SettingScreen";
-import IntroduceRefill from "../Screens/SettingScreen/IntroduceRefill";
-import GreenGift from "../Screens/SettingScreen/GreenGift";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import ChangePassword from '../Screens/SettingScreen/ChangePassword';
+import Profile from '../Screens/SettingScreen/Profile';
+import SettingScreen from '../Screens/SettingScreen';
+import IntroduceRefill from '../Screens/SettingScreen/IntroduceRefill';
+import GreenGift from '../Screens/SettingScreen/GreenGift';
+import Account from '../Screens/Account';
 const SettingStack = createStackNavigator();
 
 const SettingStackScreen = () => (
   <SettingStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
       },
 
-      headerTintColor: "#000000",
+      headerTintColor: '#000000',
       headerTitleStyle: {
-        fontWeight: "bold",
+        fontWeight: 'bold',
       },
     }}
-    initialRouteName="Setting"
+    initialRouteName="AccountScreen"
   >
+    <SettingStack.Screen
+      name="AccountScreen"
+      component={Account}
+      options={{ headerShown: false }}
+    />
     <SettingStack.Screen
       name="Setting"
       component={SettingScreen}
@@ -37,21 +43,21 @@ const SettingStackScreen = () => (
       name="Profile"
       component={Profile}
       options={{
-        title: "Profile",
+        title: 'Profile',
       }}
     />
     <SettingStack.Screen
       name="GreenGift"
       component={GreenGift}
       options={{
-        title: "Green Gift",
+        title: 'Green Gift',
       }}
     />
     <SettingStack.Screen
       name="IntroduceRefill"
       component={IntroduceRefill}
       options={{
-        title: "Introduce Refill",
+        title: 'Introduce Refill',
       }}
     />
   </SettingStack.Navigator>
