@@ -23,8 +23,8 @@ export default function Main() {
 const styles = StyleSheet.create({
   loading: {
     flex: 1,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

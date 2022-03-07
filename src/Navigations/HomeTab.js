@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
@@ -12,7 +12,7 @@ const HomeTab = (props) => {
     <HomeTabs.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.buttons,
-        tabBarStyle: [{ display: 'flex' }, null],
+        tabBarStyle: [{ display: "flex" }, null],
       }}
     >
       {bottomRoutes.map((e, index) => {
