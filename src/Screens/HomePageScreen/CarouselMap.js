@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Alert, Dimensions } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import {} from 'expo';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import ModalMapShop from '../../components/ModalMapShop';
+import React, { Component } from "react";
+import { StyleSheet, View, Text, Image, Alert, Dimensions } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
+import {} from "expo";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+import ModalMapShop from "../../components/ModalMapShop";
 
 export default class CarouselMap extends Component {
   static navigationOptions = {
-    title: 'San Francisco',
+    title: "San Francisco",
   };
 
   state = {
@@ -16,34 +16,34 @@ export default class CarouselMap extends Component {
     openModal: false,
     coordinates: [
       {
-        name: 'Burger',
+        name: "Burger",
         latitude: 16.069103,
         longitude: 108.234217,
-        image: require('./img/burger.jpg'),
+        image: require("./img/burger.jpg"),
       },
       {
-        name: 'Pizza',
+        name: "Pizza",
         latitude: 16.058865,
         longitude: 108.241492,
-        image: require('./img/pizza.jpg'),
+        image: require("./img/pizza.jpg"),
       },
       {
-        name: 'Soup',
+        name: "Soup",
         latitude: 37.7665248,
         longitude: -122.4165628,
-        image: require('./img/soup.jpg'),
+        image: require("./img/soup.jpg"),
       },
       {
-        name: 'Sushi',
+        name: "Sushi",
         latitude: 37.7834153,
         longitude: -122.4527787,
-        image: require('./img/sushi.jpg'),
+        image: require("./img/sushi.jpg"),
       },
       {
-        name: 'Curry',
+        name: "Curry",
         latitude: 37.7948105,
         longitude: -122.4596065,
-        image: require('./img/curry.jpg'),
+        image: require("./img/curry.jpg"),
       },
     ],
   };
@@ -53,13 +53,13 @@ export default class CarouselMap extends Component {
   }
 
   showWelcomeMessage = () =>
-    Alert.alert('Welcome to San Francisco', 'The food is amazing', [
+    Alert.alert("Welcome to San Francisco", "The food is amazing", [
       {
-        text: 'Cancel',
-        style: 'cancel',
+        text: "Cancel",
+        style: "cancel",
       },
       {
-        text: 'Ok',
+        text: "Ok",
       },
     ]);
 
@@ -127,7 +127,7 @@ export default class CarouselMap extends Component {
           <Marker
             draggable
             coordinate={{ latitude: 37.7825259, longitude: -122.4351431 }}
-            image={require('../../../assets/caydoday.png')}
+            image={require("../../../assets/caydoday.png")}
           >
             <Callout onPress={this.showWelcomeMessage}>
               <Text>An Interesting city</Text>
@@ -139,7 +139,7 @@ export default class CarouselMap extends Component {
               key={marker.name}
               ref={(ref) => (this.state.markers[index] = ref)}
               onPress={() => this.setState({ openModal: true })}
-              image={require('../../../assets/caydoday.png')}
+              image={require("../../../assets/caydoday.png")}
               coordinate={{
                 latitude: marker.latitude,
                 longitude: marker.longitude,
@@ -171,12 +171,12 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   carousel: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     marginBottom: 48,
   },
   cardContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     height: 200,
     width: 300,
     padding: 24,
@@ -186,13 +186,13 @@ const styles = StyleSheet.create({
     height: 120,
     width: 300,
     bottom: 0,
-    position: 'absolute',
+    position: "absolute",
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
   cardTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 22,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
