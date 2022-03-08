@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React from "react";
 import { posts } from "./GreenComunity";
-import { FontAwesome, FontAwesome5, AntDesign } from "@expo/vector-icons";
+import { AntDesign, EvilIcons, Fontisto } from "@expo/vector-icons";
 
 export default function Account({ navigation }) {
   return (
@@ -111,16 +111,21 @@ const Post = () => (
           style={{ marginLeft: 20, marginBottom: 20, backgroundColor: "#eee" }}
           key={index}
         >
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
-              style={{ width: 30, height: 30, marginRight: 10 }}
+              style={{
+                width: 30,
+                height: 30,
+                marginRight: 10,
+                borderRadius: 20,
+              }}
               source={{
                 uri: post1.avatar,
               }}
             />
-            <Text style={styles.text1}>{post1.name}</Text>
+            <Text style={styles.name}>{post1.name}</Text>
           </View>
-          <Text>{post1.description}</Text>
+          <Text style={styles.textDescription}>{post1.description}</Text>
           <Image
             style={styles.tinyLogo}
             source={{
@@ -136,110 +141,22 @@ const Post = () => (
             }}
           >
             <View style={{ flexDirection: "row" }}>
-              <AntDesign style={{ marginRight: 10 }} name="like1" size={25} />
+              <EvilIcons style={{ marginRight: 8 }} name="like" size={30} />
               <Text style={styles.text1}>Like</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
-              <FontAwesome5
-                style={{ marginRight: 10 }}
-                name="comment"
-                size={25}
-              />
+              <EvilIcons style={{ marginRight: 8 }} name="comment" size={30} />
               <Text style={styles.text1}>Comment</Text>
             </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <FontAwesome style={{ marginRight: 10 }} name="share" size={25} />
+              <Fontisto style={{ marginRight: 8 }} name="share-a" size={20} />
               <Text style={styles.text1}>Share</Text>
             </View>
           </View>
         </View>
       ))}
-      {/* <View style={{ marginLeft: 20, marginBottom: 20 }}>
-      <View style={{ flexDirection: "row" }}>
-        <FontAwesome
-          style={{ marginRight: 20 }}
-          name="user-circle-o"
-          size={25}
-        />
-        <Text style={styles.text1}>Nguyễn Thị Thu</Text>
-      </View>
-      <Text>
-        Browse to node_modules/react-native-vector-icons and drag the folder
-        Fonts (or just the ones you want) to your project in Xcode. Make sure
-        your app is checked
-      </Text>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQK_aUgwjRNFXDuHf46c2Hetd9LWHy5hfR94mqcLsLqRB1ggrUOJqOQU1mb51J06yPKf00&usqp=CAU",
-        }}
-      />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginRight: 30,
-          marginTop: 15,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <AntDesign style={{ marginRight: 10 }} name="like1" size={25} />
-          <Text style={styles.text1}>Like</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <FontAwesome5 style={{ marginRight: 10 }} name="comment" size={25} />
-          <Text style={styles.text1}>Comment</Text>
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <FontAwesome style={{ marginRight: 10 }} name="share" size={25} />
-          <Text style={styles.text1}>Share</Text>
-        </View>
-      </View>
-    </View>
-    <View style={{ marginLeft: 20 }}>
-      <View style={{ flexDirection: "row" }}>
-        <FontAwesome
-          style={{ marginRight: 20 }}
-          name="user-circle-o"
-          size={25}
-        />
-        <Text style={styles.text1}>Lê Thị Mai Hoa</Text>
-      </View>
-      <Text>
-        Browse to node_modules/react-native-vector-icons and drag the folder
-        Fonts (or just the ones you want) to your project in Xcode. Make sure
-        your app is checked
-      </Text>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDoqKiBFcK-frBcF9uoG3TYAS56rPMhiRiOg&usqp=CAU",
-        }}
-      />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginRight: 30,
-          marginTop: 15,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <AntDesign style={{ marginRight: 10 }} name="like1" size={25} />
-          <Text style={styles.text1}>Like</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <FontAwesome5 style={{ marginRight: 10 }} name="comment" size={25} />
-          <Text style={styles.text1}>Comment</Text>
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <FontAwesome style={{ marginRight: 10 }} name="share" size={25} />
-          <Text style={styles.text1}>Share</Text>
-        </View>
-      </View>
-    </View> */}
     </View>
   </ScrollView>
 );
@@ -247,7 +164,7 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: 70,
-    backgroundColor: "#DB147F",
+    backgroundColor: "#48ad34",
   },
   iconsetting: {
     position: "absolute",
@@ -267,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   text1: {
-    fontSize: 20,
+    fontSize: 16,
   },
   icon1: { marginRight: 10 },
   icon2: { marginRight: 10 },
@@ -291,5 +208,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingVertical: 20,
+  },
+  textDescription: {
+    fontSize: 16,
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
