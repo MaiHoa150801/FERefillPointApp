@@ -73,8 +73,10 @@ export default function LoginScreen({ navigation, reloadApp }) {
     }
   }
   const validationSchema = Yup.object({
-    email: Yup.string().email('!Invalid Email').required('!Email is required'),
-    password: Yup.string().required('!Password is required'),
+    email: Yup.string()
+      .email('Email sai định dạng!')
+      .required('Trường email là bắt buộc!'),
+    password: Yup.string().required('Mật khẩu là bắt buộc!'),
   });
 
   const initialValues = {
@@ -125,7 +127,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
                         onChangeText={props.handleChange('email')}
                         onBlur={props.handleBlur('email')}
                         value={props.values.email}
-                        placeholder="Email"
+                        placeholder="Nhập email"
                       />
                     </View>
                     {props.touched.email && props.errors.email ? (
@@ -141,7 +143,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
                         onBlur={props.handleBlur('password')}
                         value={props.values.password}
                         secureTextEntry={hidenpassword ? true : false}
-                        placeholder="Password"
+                        placeholder="Nhập mật khẩu"
                       />
                       <TouchableOpacity
                         onPress={() => setHidenPassword(!hidenpassword)}
@@ -163,11 +165,11 @@ export default function LoginScreen({ navigation, reloadApp }) {
                   <TouchableOpacity
                     onPress={() => navigation.navigate('ForgotScreen')}
                   >
-                    <Text style={styles.textForgor}>Forgot password?</Text>
+                    <Text style={styles.textForgor}>Quên mật khẩu?</Text>
                   </TouchableOpacity>
                 </View>
                 <Btn
-                  text="Login"
+                  text="Đăng nhập"
                   textStyle={styles.textStyle}
                   onPress={props.handleSubmit}
                   style={styles.btnLogin}
@@ -177,7 +179,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
           </Formik>
           <View style={styles.divider}></View>
           <View style={styles.textOr}>
-            <Text style={styles.or}>Or</Text>
+            <Text style={styles.or}>Hoặc</Text>
           </View>
           <View style={styles.row}>
             <TouchableOpacity onPress={signInWithGoogleAsync}>
@@ -207,7 +209,9 @@ export default function LoginScreen({ navigation, reloadApp }) {
           <TouchableOpacity
             onPress={() => navigation.navigate('RegisterScreen')}
           >
-            <Text style={{ fontSize: 15 }}>No account yet? Register</Text>
+            <Text style={{ fontSize: 15 }}>
+              Không có tài khoản? Đăng kí ngay
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -218,58 +222,58 @@ export default function LoginScreen({ navigation, reloadApp }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
+    width: '90%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   textStyle: {
-    color: "#ffffff",
-    textAlign: "center",
+    color: '#ffffff',
+    textAlign: 'center',
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   btnLogin: {
     backgroundColor: 'rgb(18, 136, 58)',
     padding: 15,
     borderRadius: 10,
-    width: "100%",
+    width: '100%',
     marginTop: 20,
   },
   divider: {
     margin: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   textInput: {
-    width: "100%",
+    width: '100%',
     padding: 10,
   },
   form: {
-    width: "100%",
+    width: '100%',
   },
   input: {
     padding: 5,
     borderWidth: 1,
-    borderColor: "#d9d5d4",
+    borderColor: '#d9d5d4',
     borderRadius: 40,
   },
   field: {
     marginBottom: '5%',
   },
   inputPass: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "90%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
   },
   textForgor: {
-    textAlign: "right",
-    color: "#111111",
+    textAlign: 'right',
+    color: '#111111',
   },
   textFooter: {
     alignItems: 'center',
@@ -277,19 +281,19 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   textOr: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
     marginTop: 25,
   },
   txt: {
-    color: "black",
-    textAlign: "center",
+    color: 'black',
+    textAlign: 'center',
     margin: 2,
     fontSize: 15,
   },
   err: {
-    color: "red",
+    color: 'red',
     paddingLeft: 10,
     fontWeight: 'bold',
   },
@@ -297,9 +301,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   notification: {
     alignItems: 'flex-end',

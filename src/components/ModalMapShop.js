@@ -18,7 +18,13 @@ const dataSource = [
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
 ];
-const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
+const ModalMapShop = ({
+  openModal,
+  closeModal,
+  nameShop,
+  navigation,
+  modalData,
+}) => {
   return (
     <ModalBottom
       modalVisible={openModal}
@@ -41,7 +47,7 @@ const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
       <RowIcon
         style={{ marginTop: 5 }}
         icon="map-marker"
-        text="329 Đình Nghệ, Sơn Trà, Đà Nẵng"
+        text={modalData ? modalData.address : ''}
       />
       <View style={[styles.row, { marginTop: 10 }]}>
         <View style={styles.row}>
@@ -66,7 +72,11 @@ const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
         <Space width={20} />
         <Btn
           style={styles.buttonView}
-          onPress={() => navigation.navigate('ShopDetail')}
+          onPress={() =>
+            navigation.navigate('ShopDetail', {
+              shopId: modalData ? modalData.account_id : 0,
+            })
+          }
           text="View shop"
           textStyle={styles.txtBtnView}
         />

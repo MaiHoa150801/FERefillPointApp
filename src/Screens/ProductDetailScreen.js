@@ -12,7 +12,8 @@ import Rating from '../components/Rating';
 import AvatarView from '../components/AvatarView';
 import Btn from '../components/Button';
 
-const ProductDetailScreen = () => {
+const ProductDetailScreen = ({ route }) => {
+  const { product } = route.params;
   const width = Dimensions.get('window').width;
   const height = (width / 100) * 60;
   const images = [
@@ -42,7 +43,7 @@ const ProductDetailScreen = () => {
             pagingEnabled
             showsVerticalScrollIndicator={false}
           >
-            {images.map((image, index) => (
+            {product.list_image.map((image, index) => (
               <Image
                 key={index}
                 style={{ width, height, resizeMode: 'cover' }}
@@ -54,7 +55,7 @@ const ProductDetailScreen = () => {
             ))}
           </ScrollView>
           <View style={styles.pagination}>
-            {images.map((i, k) => (
+            {product.list_image.map((i, k) => (
               <Text
                 key={k}
                 style={
@@ -67,56 +68,19 @@ const ProductDetailScreen = () => {
           </View>
         </View>
         <View style={styles.nameProduct}>
-          <Text style={styles.nameText}>
-            Refill nước giặt hữu cơ Fuwa3e oragnic sinh học giặc quần áo an toàn
-          </Text>
+          <Text style={styles.nameText}>{product.name}</Text>
           <Text style={styles.price}>
-            <Text style={styles.money}>10.000 vnd</Text>/100ml
+            <Text style={styles.money}>{product.sale_price}vnđ</Text>/100ml
           </Text>
-          <View style={styles.starView}>{Rating(4)}</View>
+          <Text style={styles.unit_price}>{product.unit_price}vnđ</Text>
         </View>
       </View>
       <Line height={10} color={'#F5F5F5'} />
-      <View style={styles.shopView}>
-        <AvatarView
-          star={4}
-          height={30}
-          width={30}
-          color="#293845"
-        ></AvatarView>
-        {/* <Btn
-          text="Lưu"
-          style={styles.saveBtn}
-          textStyle={styles.saveText}
-        ></Btn> */}
-      </View>
       <Line height={10} color={'#F5F5F5'} />
       <View style={styles.detailView}>
         <Text style={styles.detailText}>Chi tiết sản phẩm</Text>
         <Line height={2} color={'#F5F5F5'} />
-        <View style={styles.brandView}>
-          <View style={styles.typeView}>
-            <Text style={styles.brandText}>Thương hiệu</Text>
-          </View>
-
-          <Text style={styles.brandName}>Fuwa3e</Text>
-        </View>
-        <View style={styles.brandView}>
-          <View style={styles.typeView}>
-            <Text style={styles.brandText}>Hình thức</Text>
-          </View>
-
-          <Text style={styles.brandName}>Chất lỏng</Text>
-        </View>
-
-        <Line height={2} color={'#F5F5F5'} />
-        <Text style={styles.infoText}>
-          * Thông tin Nước giặt hữu cơ Fuwa3e organic sinh học giặt quần áo, an
-          toàn cho bé {'\n'}
-          {'\n'}Thành phần: {'\n'}- 90% là chế phẩm Enzyme sinh học được ngâm ủ
-          và lên men từ vỏ dứa, cam, chanh {'\n'}- 10% là các chất hữu cơ tạo
-          bọt lành tính từ thực vật
-        </Text>
+        <Text style={styles.description}>{product.description}</Text>
       </View>
 
       <Line height={10} color={'#F5F5F5'} />
@@ -155,6 +119,7 @@ const styles = StyleSheet.create({
   money: { color: '#E8833A', fontWeight: '700' },
   detailText: {
     fontWeight: '700',
+    fontSize: 17,
     padding: 10,
   },
   brandText: {
@@ -193,5 +158,19 @@ const styles = StyleSheet.create({
   saveBtn: {
     borderColor: '#C3CFD9',
     borderWidth: 1,
+  },
+  unit_price: {
+    color: 'gray',
+    fontSize: 13,
+    marginLeft: 10,
+    marginTop: -7,
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
+  description: {
+    width: '94%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 15,
   },
 });

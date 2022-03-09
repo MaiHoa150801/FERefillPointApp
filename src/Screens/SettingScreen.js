@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 export default function SettingScreen({ navigation, navigation: { goBack } }) {
   return (
@@ -8,12 +10,12 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
       style={{
         marginTop: 20,
         marginBottom: 20,
-        backgroundColor: "#ffff",
+        backgroundColor: '#ffff',
       }}
     >
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           height: 50,
           marginTop: 10,
           borderBottomWidth: 0.5,
@@ -29,7 +31,7 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
         <Text
           style={{
             fontSize: 25,
-            color: "#eeeee",
+            color: '#eeeee',
             marginLeft: 100,
           }}
         >
@@ -39,63 +41,60 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
 
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("ChangePassword")}
+        onPress={() => navigation.navigate('ChangePassword')}
       >
-        <Ionicons name="finger-print" size={45} color={"#c75058"} />
+        <Ionicons name="finger-print" size={45} color={'#c75058'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Đổi mật khẩu</Text>
         </View>
         <View style={styles.iconArrow}>
-          <Ionicons name="chevron-forward-sharp" size={20} color={"black"} />
+          <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() => navigation.navigate('Profile')}
       >
-        <Ionicons name="md-people" size={45} color={"#5bc750"} />
+        <Ionicons name="md-people" size={45} color={'#5bc750'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Đổi thông tin cá nhân</Text>
         </View>
         <View style={styles.iconArrow}>
-          <Ionicons name="chevron-forward-sharp" size={20} color={"black"} />
+          <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("GreenGift")}
+        onPress={() => navigation.navigate('GreenGift')}
       >
-        <Ionicons name="leaf" size={45} color={"#5bc750"} />
+        <Ionicons name="leaf" size={45} color={'#5bc750'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Qùa xanh của tôi</Text>
         </View>
         <View style={styles.iconArrow}>
-          <Ionicons name="chevron-forward-sharp" size={20} color={"black"} />
+          <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("IntroduceRefill")}
+        onPress={() => navigation.navigate('IntroduceRefill')}
       >
-        <Ionicons name="hand-left" size={45} color={"#5bc750"} />
+        <Ionicons name="hand-left" size={45} color={'#5bc750'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Gioi thiệu quà xanh</Text>
         </View>
         <View style={styles.iconArrow}>
-          <Ionicons name="chevron-forward-sharp" size={20} color={"black"} />
+          <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => navigation.navigate("Profile")}
-      >
-        <Ionicons name="exit-outline" size={45} color={"#ACB2B8"} />
+      <TouchableOpacity style={styles.container} onPress={() => signOut(auth)}>
+        <Ionicons name="exit-outline" size={45} color={'#ACB2B8'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Đăng xuất</Text>
         </View>
         <View style={styles.iconArrow}>
-          <Ionicons name="chevron-forward-sharp" size={20} color={"black"} />
+          <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
     </View>
@@ -104,26 +103,26 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffff",
+    backgroundColor: '#ffff',
     paddingVertical: 18,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
     paddingLeft: 16,
   },
   iconArrow: {
     flex: 1,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     paddingRight: 5,
   },
   userName: {
     paddingLeft: 16,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   Text: {
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 16,
-    color: "#171725",
+    color: '#171725',
     marginLeft: 10,
   },
 });
