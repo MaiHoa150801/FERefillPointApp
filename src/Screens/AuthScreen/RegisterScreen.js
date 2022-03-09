@@ -3,11 +3,10 @@ import { ToastAndroid, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Btn from '../../components/Button';
 import FieldInput from '../../components/Form/FieldInput';
-import { Picker } from '@react-native-picker/picker';
 import {
   createUserWithEmailAndPassword,
   signInAnonymously,
@@ -15,27 +14,29 @@ import {
 } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import { Image } from 'react-native';
-import { RadioButton } from 'react-native-paper';
-import { Register } from '../../service/AuthService';
-import { Alert } from 'react-native';
 const RegisterScreen = ({ navigation }) => {
   const validationSchema = Yup.object({
-    name: Yup.string().required('Vui lòng nhập tên!'),
-    gender: Yup.string().required('Chọn giới tính!'),
-    phone: Yup.number('Số điện thoại không hợp lệ!')
-      .required('Vui lòng nhập số điện thoại!')
-      .min(1000000000, 'Số điện thoại không hợp lệ!'),
-    email: Yup.string()
-      .email('Email không hợp lệ')
-      .required('Vui lòng nhập Email!'),
+    name: Yup.string().required('!Name is required'),
+    phone: Yup.string()
+      .required('!Phone is required')
+      .min(10, '!Invalid phone number'),
+    email: Yup.string().email('!Invalid Email').required('!Email is required'),
     password: Yup.string()
-      .required('Vui lòng nhập mật khẩu!')
-      .min(6, 'Mật khẩu phải lớn hơn 6 kí tự!'),
-    confirmPassword: Yup.string().when('password', {
-      is: (val) => (val && val.length > 0 ? true : false),
-      then: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
-    }),
+      .required('!Password is required')
+      .min(6, 'Password should be at least 6 characters'),
+    confirmPassword: Yup.string()
+      .required('!Confirm password is required')
+      .min(6, 'Password should be at least 6 characters'),
   });
+  const checkError = (err) => {
+    switch (err) {
+      case 'auth/email-already-in-use':
+        showToastWithGravity('!Email already in use');
+        break;
+      default:
+        break;
+    }
+  };
   const showToastWithGravity = (message) => {
     ToastAndroid.showWithGravity(
       message,
@@ -45,18 +46,22 @@ const RegisterScreen = ({ navigation }) => {
   };
   const initialValues = {
     name: '',
-    gender: '',
     phone: '',
     email: '',
     password: '',
     confirmPassword: '',
   };
-  const register = async (values) => {
+  const register = async ({ email, password, name }) => {
     try {
-      const response = await Register(values);
-      navigation.navigate('LoginScreen');
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ).then(async (e) => {
+        await updateProfile(auth.currentUser, { displayName: name });
+      });
     } catch (error) {
-      showToastWithGravity('Tài khoản đã tồn tại!');
+      checkError(error.code);
     }
   };
   return (
@@ -87,31 +92,14 @@ const RegisterScreen = ({ navigation }) => {
               <View style={styles.form}>
                 <FieldInput
                   formProps={props}
+                  focus={true}
                   name="name"
-                  placeholder="Họ tên"
+                  placeholder="Name"
                 />
-                <View style={styles.field}>
-                  <View style={styles.input}>
-                    <Picker
-                      selectedValue={props.values.gender}
-                      mode="dropdown"
-                      onValueChange={(itemValue, itemIndex) =>
-                        props.setFieldValue('gender', itemValue)
-                      }
-                    >
-                      <Picker.Item label="Giới tính" value="" />
-                      <Picker.Item label="Nam" value="Male" />
-                      <Picker.Item label="Nữ" value="Female" />
-                    </Picker>
-                  </View>
-                  {props.touched.gender && props.errors.gender ? (
-                    <Text style={styles.err}>{props.errors.gender}</Text>
-                  ) : null}
-                </View>
                 <FieldInput
                   formProps={props}
                   name="phone"
-                  placeholder="Số điện thoại"
+                  placeholder="Phone"
                 />
                 <FieldInput
                   formProps={props}
@@ -121,17 +109,17 @@ const RegisterScreen = ({ navigation }) => {
                 <FieldInput
                   formProps={props}
                   name="password"
-                  placeholder="Mật khẩu"
+                  placeholder="Password"
                   type="password"
                 />
                 <FieldInput
                   formProps={props}
                   name="confirmPassword"
-                  placeholder="Xác nhận lại mật khẩu"
+                  placeholder="Confirm password"
                   type="password"
                 />
                 <Btn
-                  text="Đăng kí"
+                  text="Register"
                   textStyle={styles.textStyle}
                   onPress={props.handleSubmit}
                   style={styles.btnLogin}
@@ -142,7 +130,7 @@ const RegisterScreen = ({ navigation }) => {
         </View>
         <View style={styles.textFooter}>
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-            <Text style={{ fontSize: 15 }}>Đã có tài khoản? Đăng nhập</Text>
+            <Text style={{ fontSize: 15 }}>Already have an account? Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -185,19 +173,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginTop: 50,
-  },
-  input: {
-    padding: 5,
-    borderWidth: 1,
-    borderColor: '#d9d5d4',
-    borderRadius: 40,
-  },
-  field: {
-    marginBottom: '5%',
-  },
-  err: {
-    color: 'red',
-    paddingLeft: 10,
-    fontWeight: 'bold',
   },
 });
