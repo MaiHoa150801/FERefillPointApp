@@ -15,7 +15,7 @@ const FieldInput = ({ formProps, name, placeholder, focus, type = '' }) => {
               onBlur={formProps.handleBlur(name)}
               value={formProps.values[name]}
               secureTextEntry={hidenpassword ? true : false}
-              placeholder="Password"
+              placeholder={placeholder}
             />
             <TouchableOpacity onPress={() => setHidenPassword(!hidenpassword)}>
               {hidenpassword ? (
