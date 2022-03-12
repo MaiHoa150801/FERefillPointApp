@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,23 +7,64 @@ import {
   ImageBackground,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
-import React from "react";
+import { Items } from "../mock-data/ProductData";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 
 import Btn from "../components/Button";
-
+import Line from "../components/Line";
 import Searchbar from "../components/SearchBar";
 import AvatarView from "../components/AvatarView";
-import ProductCard from "../components/cards/ProductCard";
-import Rating from "../components/Rating";
 const ShopDetailScreen = () => {
   const navigation = useNavigation();
+
+  const [products, setProducts] = useState([]);
+
+  //get called on screen loads
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getDataFromDB();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  //get data from DB
+
+  const getDataFromDB = () => {
+    let productList = [];
+    for (let index = 0; index < Items.length; index++) {
+      if (Items[index] !== null) {
+        productList.push(Items[index]);
+      }
+    }
+
+    setProducts(productList);
+  };
   const image = {
     uri: "https://fuwa.com.vn/wp-content/uploads/2020/06/ALL-1024x661.jpg",
   };
 
+  const ProductCard = ({ data }) => {
+    return (
+      <View style={styles.productItemView}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ProductDetail", { productID: data.id })
+          }
+        >
+          <Image
+            style={styles.productStyle}
+            source={{ uri: data.productImage }}
+            resizeMode="cover"
+          />
+          <Text style={styles.nameProduct}>{data.name}</Text>
+          <Text style={styles.price}>{data.unit_price}/100ml</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
@@ -41,21 +83,21 @@ const ShopDetailScreen = () => {
               style={styles.searchBar}
             ></Searchbar>
           </View>
-          {/* {star ? (
-          Rating(star)
-        ) : (
-          <View style={styles.locationView}>
-            <Ionicons name="location-outline" size={17} color={"#0D0A03"} />
-            <Text style={styles.locationText}>{address}</Text>
-          </View>
-        )} */}
+
           <View style={styles.avatarView}>
             <AvatarView
               star={4}
               height={40}
               width={40}
+              text="Fuwa3 - Chế phẩm sinh học"
               color="#ffff"
             ></AvatarView>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ShoppingCart")}
+              style={styles.shoppingCart}
+            >
+              <Entypo name="shopping-cart" size={25} color={"white"} />
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
@@ -92,79 +134,11 @@ const ShopDetailScreen = () => {
           </View>
         </ScrollView>
         <Text style={styles.productText}>Sản phẩm</Text>
-        <View style={styles.productLists}>
-          <View style={styles.productList}>
-            <View style={styles.productView}>
-              <View style={styles.productItemView}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ProductDetail")}
-                >
-                  <Image
-                    style={styles.productStyle}
-                    source={{
-                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
-                    }}
-                    resizeMode="cover"
-                  />
-                  <Text style={styles.nameProduct}>
-                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-                  </Text>
-                  <Text style={styles.price}>10.000đ/100ml</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.productItemView}>
-                <Image
-                  style={styles.productStyle}
-                  source={{
-                    uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
-                  }}
-                  resizeMode="cover"
-                />
 
-                <Text style={styles.nameProduct}>
-                  Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-                </Text>
-                <Text style={styles.price}>10.000đ/100ml</Text>
-              </View>
-            </View>
-
-            <View style={styles.productView}>
-              <View style={styles.productItemView}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ProductDetail")}
-                >
-                  <Image
-                    style={styles.productStyle}
-                    source={{
-                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
-                    }}
-                    resizeMode="cover"
-                  />
-                  <Text style={styles.nameProduct}>
-                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-                  </Text>
-                  <Text style={styles.price}>10.000đ/100ml</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.productItemView}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ProductDetail")}
-                >
-                  <Image
-                    style={styles.productStyle}
-                    source={{
-                      uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
-                    }}
-                    resizeMode="cover"
-                  />
-                  <Text style={styles.nameProduct}>
-                    Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-                  </Text>
-                  <Text style={styles.price}>10.000đ/100ml</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+        <View style={styles.listProduct}>
+          {products.map((data) => {
+            return <ProductCard data={data} key={data.id} />;
+          })}
         </View>
       </ScrollView>
     </View>
@@ -245,7 +219,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   productText: {
-    color: "#1B71B9",
+    color: "green",
     fontWeight: "700",
     fontSize: 17,
     paddingTop: 25,
@@ -256,7 +230,7 @@ const styles = StyleSheet.create({
   },
   productView: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
   },
   productItemView: {
     width: "47%",
@@ -281,6 +255,7 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     fontSize: 17,
   },
+
   searchView: {
     paddingTop: 30,
     flexDirection: "column",
@@ -298,5 +273,17 @@ const styles = StyleSheet.create({
   },
   avatarView: {
     paddingLeft: 16,
+    flexDirection: "row",
+  },
+  listProduct: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingLeft: 16,
+    backgroundColor: "#F5F5F5",
+    justifyContent: "center",
+  },
+  shoppingCart: {
+    paddingLeft: 60,
+    paddingTop: 10,
   },
 });

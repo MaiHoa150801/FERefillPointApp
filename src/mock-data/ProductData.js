@@ -1,55 +1,62 @@
-const ShopData = [
+export const Items = [
   {
-    address: "329 Đình Nghệ, Sơn Trà, Đà Nẵng",
-    name: "Fuwa3E - Chế phẩm sinh học từ vỏ trái cây",
-    rate: 5,
-    avatar: "https://fuwa.com.vn/wp-content/uploads/2021/10/logo-Fuwa3E.png",
-    background:
-      "https://media.moitruongvadothi.vn/images/2021/10/29/9877-1635477918-nuoc-tay-rua-sinh-hoc-2.jpg",
-    closeTime: "5 PM",
-    openTime: "9:00 AM",
-    voucher: [
-      {
-        sale: "Giảm 15k",
-        limited: "Đơn tối thiểu 199k",
-        EXP: "12.04.2022",
-        status: false,
-      },
+    id: 1,
+    name: "Refill nước giặt hữu cơ Fuwa3e oragnic",
+    productImage:
+      "https://fuwa.com.vn/wp-content/uploads/2020/08/Nuoc-giat-500ml-300x300.png",
+
+    list_image: [
+      "https://fuwa.com.vn/wp-content/uploads/2020/08/Nuoc-giat-500ml-300x300.png",
+      "https://thudoxanh.vn/wp-content/uploads/2020/12/Nuoc-Giat-1.jpg",
+      "https://salt.tikicdn.com/cache/280x280/ts/product/05/f0/7c/cc29760e29b7326edda1f95d1ea00254.jpg",
     ],
-    product: [
-      {
-        name: "Refill nước giặt hữu cơ Fuwa3e oragnic sinh học giặc quần áo an toàn",
-        img: [
-          "https://o.vdoc.vn/data/image/2021/02/22/ta-canh-san-truong-gio-ra-choi-sieu-hay-1.jpg",
-          "https://www.collinsdictionary.com/images/full/school_309241295.jpg",
-          "https://www.berkeleyside.org/wp-content/uploads/2020/01/BAM-berkeley-student-classroom-class-elementary-busd-school.jpg",
-          "https://cdn.tgdd.vn/hoi-dap/1380273/back-to-school-la-gi-lich-back-to-school-cua-cac-nuoc-tren-7-800x450.jpg",
-        ],
-        unitPrice: "10.000vnđ/100ml",
-        rate: 5,
-        sold: "2,2k",
-        productDetail: {
-          brand: "Fuwa3e",
-          state: "Chất lỏng",
-          ingredient:
-            "90% là chế phẩm Enzyme sinh học được ngâm ủ và lên men từ vỏ dứa, cam, chanh, 10% là các chất hữu cơ tạo bọt lành tính từ thực vật",
-        },
-      },
+    isAvailable: true,
+    unit_price: 10000,
+    sale_price: null,
+    quantity: 0,
+  },
+  {
+    id: 2,
+    name: "Refill nước rửa chén hữu cơ Fuwa3e",
+    productImage: "https://cf.shopee.vn/file/d02cdde56e7f80a3d7e351467e5d1c03",
+
+    list_image: [
+      "https://cf.shopee.vn/file/d02cdde56e7f80a3d7e351467e5d1c03",
+      "https://fuwa.com.vn/wp-content/uploads/2021/06/92011361_651531362339110_7724789373832527872_n.jpg",
+      "https://cf.shopee.vn/file/aad905209f94016c3bf35cbba6320003",
     ],
-    review: [
-      {
-        name: "Thu",
-        rate: 5,
-        content: "Very good",
-        img: [
-          "https://o.vdoc.vn/data/image/2021/02/22/ta-canh-san-truong-gio-ra-choi-sieu-hay-1.jpg",
-          "https://www.collinsdictionary.com/images/full/school_309241295.jpg",
-          "https://www.berkeleyside.org/wp-content/uploads/2020/01/BAM-berkeley-student-classroom-class-elementary-busd-school.jpg",
-          "https://cdn.tgdd.vn/hoi-dap/1380273/back-to-school-la-gi-lich-back-to-school-cua-cac-nuoc-tren-7-800x450.jpg",
-        ],
-        date: "25-2-2022",
-      },
+    isAvailable: true,
+    unit_price: 20000,
+    sale_price: null,
+    quantity: 0,
+  },
+  {
+    id: 3,
+    name: "Refill nước rửa tay hữu cơ Fuwa3e oragnic sinh học",
+    productImage:
+      "https://fuwa.com.vn/wp-content/uploads/2021/10/Nuoc-rua-tay-Fuwa3e.jpg",
+
+    list_image: [
+      "https://fuwa.com.vn/wp-content/uploads/2021/10/Nuoc-rua-tay-Fuwa3e.jpg",
+      "https://cf.shopee.vn/file/d6bb990ddb039bc3e5f9c26cf9bc5fd5",
     ],
+    isAvailable: true,
+    unit_price: 12000,
+    sale_price: null,
+    quantity: 0,
+  },
+  {
+    id: 4,
+    name: "Refill nước rửa tay hữu cơ Fuwa3e oragnic sinh học",
+    productImage:
+      "https://fuwa.com.vn/wp-content/uploads/2021/10/Nuoc-lau-san-an-toan-cho-be2.png",
+
+    list_image: [
+      "https://fuwa.com.vn/wp-content/uploads/2021/10/Nuoc-lau-san-an-toan-cho-be2.png",
+      "https://gigistories.com/wp-content/uploads/2020/11/Nuoc-Lau-San-An-Toan-Voi-Em-Be-1.jpg",
+    ],
+    isAvailable: true,
+    unit_price: 8000,
+    sale_price: null,
   },
 ];
-export default ShopData;

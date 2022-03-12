@@ -3,7 +3,7 @@ import React from "react";
 import Rating from "./Rating";
 import { Ionicons } from "@expo/vector-icons";
 
-const AvatarView = ({ star, width, height, color }) => {
+const AvatarView = ({ star, width, height, color, text }) => {
   return (
     <View style={styles.avatarView}>
       <Image
@@ -24,7 +24,7 @@ const AvatarView = ({ star, width, height, color }) => {
             fontSize: 16,
           }}
         >
-          Fuwa3e - Chế phẩm sinh học
+          {text}
         </Text>
 
         <View style={styles.starView}>{Rating(star)}</View>
@@ -38,12 +38,12 @@ export default AvatarView;
 const styles = StyleSheet.create({
   avatarView: {
     flexDirection: "row",
-    padding: 16,
+    padding: 10,
     // marginLeft: 16,
   },
 
   nameShop: {
-    paddingLeft: 16,
+    paddingLeft: 10,
   },
 
   starView: {
