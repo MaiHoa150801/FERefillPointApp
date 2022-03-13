@@ -25,19 +25,25 @@ const AuthStackScreen = ({ navigation }) => (
       component={SplashScreen}
       options={{ headerShown: false }}
     />
-    <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{}} />
+    <AuthStack.Screen
+      name="LoginScreen"
+      component={LoginScreen}
+      options={{
+        title: 'Đăng nhập tài khoản',
+      }}
+    />
     <AuthStack.Screen
       name="ForgotScreen"
       component={ForgotPasswordScreen}
       options={{
-        title: 'Forgor password',
+        title: 'Quên mật khẩu',
       }}
     />
     <AuthStack.Screen
       name="RegisterScreen"
       component={RegisterScreen}
       options={{
-        title: 'Register Screen',
+        title: 'Đăng kí tài khoản',
       }}
     />
   </AuthStack.Navigator>

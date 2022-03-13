@@ -1,65 +1,74 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Alert, Dimensions } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
-import {} from "expo";
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import ModalMapShop from "../../components/ModalMapShop";
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, Image, Alert, Dimensions } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
+import {} from 'expo';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import ModalMapShop from '../../components/ModalMapShop';
+import { getSalespersonData } from '../../service/SalespersonService';
 
 export default class CarouselMap extends Component {
   static navigationOptions = {
-    title: "San Francisco",
+    title: 'San Francisco',
   };
 
   state = {
     markers: [],
     openModal: false,
+    modalData: null,
+    shop: [],
     coordinates: [
       {
-        name: "Burger",
+        name: 'Burger',
         latitude: 16.069103,
         longitude: 108.234217,
-        image: require("./img/burger.jpg"),
+        image: require('./img/burger.jpg'),
       },
       {
-        name: "Pizza",
+        name: 'Pizza',
         latitude: 16.058865,
         longitude: 108.241492,
-        image: require("./img/pizza.jpg"),
+        image: require('./img/pizza.jpg'),
       },
       {
-        name: "Soup",
+        name: 'Soup',
         latitude: 37.7665248,
         longitude: -122.4165628,
-        image: require("./img/soup.jpg"),
+        image: require('./img/soup.jpg'),
       },
       {
-        name: "Sushi",
+        name: 'Sushi',
         latitude: 37.7834153,
         longitude: -122.4527787,
-        image: require("./img/sushi.jpg"),
+        image: require('./img/sushi.jpg'),
       },
       {
-        name: "Curry",
+        name: 'Curry',
         latitude: 37.7948105,
         longitude: -122.4596065,
-        image: require("./img/curry.jpg"),
+        image: require('./img/curry.jpg'),
       },
     ],
   };
 
   componentDidMount() {
     this.requestLocationPermission();
+    this.getData();
   }
-
+  getData = async () => {
+    const response = await getSalespersonData();
+    this.setState({
+      shop: response.data.salespersons,
+    });
+  };
   showWelcomeMessage = () =>
-    Alert.alert("Welcome to San Francisco", "The food is amazing", [
+    Alert.alert('Welcome to San Francisco', 'The food is amazing', [
       {
-        text: "Cancel",
-        style: "cancel",
+        text: 'Cancel',
+        style: 'cancel',
       },
       {
-        text: "Ok",
+        text: 'Ok',
       },
     ]);
 
@@ -103,7 +112,9 @@ export default class CarouselMap extends Component {
 
     this._carousel.snapToItem(index);
   };
-
+  shopMapClick = (data) => {
+    this.setState({ openModal: true, modalData: data });
+  };
   renderCarouselItem = ({ item }) => (
     <View style={styles.cardContainer}>
       <Text style={styles.cardTitle}>{item.name}</Text>
@@ -127,34 +138,36 @@ export default class CarouselMap extends Component {
           <Marker
             draggable
             coordinate={{ latitude: 37.7825259, longitude: -122.4351431 }}
-            image={require("../../../assets/caydoday.png")}
+            image={require('../../../assets/caydoday.png')}
           >
             <Callout onPress={this.showWelcomeMessage}>
               <Text>An Interesting city</Text>
             </Callout>
           </Marker>
-          {this.state.coordinates.map((marker, index) => (
-            <Marker
-              draggable
-              key={marker.name}
-              ref={(ref) => (this.state.markers[index] = ref)}
-              onPress={() => this.setState({ openModal: true })}
-              image={require("../../../assets/caydoday.png")}
-              coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              }}
-            >
-              <Callout>
-                <Text>{marker.name}</Text>
-              </Callout>
-            </Marker>
-          ))}
+          {this.state.shop &&
+            this.state.shop.map((marker, index) => (
+              <Marker
+                draggable
+                key={marker.name}
+                ref={(ref) => (this.state.markers[index] = ref)}
+                onPress={() => this.shopMapClick(marker)}
+                image={require('../../../assets/caydoday.png')}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
+              >
+                <Callout>
+                  <Text>{marker.name}</Text>
+                </Callout>
+              </Marker>
+            ))}
         </MapView>
         <ModalMapShop
           openModal={this.state.openModal}
+          modalData={this.state.modalData}
           closeModal={() => this.setState({ openModal: false })}
-          nameShop="Bacon-Chế phẩm sinh học từ vỏ trái cây"
+          nameShop={this.state.modalData ? this.state.modalData.name : ''}
           navigation={this.props.navigation}
         />
       </View>
@@ -171,12 +184,12 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   carousel: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     marginBottom: 48,
   },
   cardContainer: {
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     height: 200,
     width: 300,
     padding: 24,
@@ -186,13 +199,13 @@ const styles = StyleSheet.create({
     height: 120,
     width: 300,
     bottom: 0,
-    position: "absolute",
+    position: 'absolute',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
   cardTitle: {
-    color: "white",
+    color: 'white',
     fontSize: 22,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 });

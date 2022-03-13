@@ -308,7 +308,8 @@ const styles = StyleSheet.create({
   },
   money: { color: "#E8833A", fontWeight: "700" },
   detailText: {
-    fontWeight: "700",
+    fontWeight: '700',
+    fontSize: 17,
     padding: 10,
   },
   brandText: {
@@ -407,5 +408,18 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 1,
     color: "#ffff",
+  unit_price: {
+    color: 'gray',
+    fontSize: 13,
+    marginLeft: 10,
+    marginTop: -7,
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
+  description: {
+    width: '94%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 15,
   },
 });
