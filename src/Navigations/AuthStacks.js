@@ -5,6 +5,8 @@ import LoginScreen from '../Screens/AuthScreen/LoginScreen';
 import ForgotPasswordScreen from '../Screens/AuthScreen/ForgorPassword';
 import SplashScreen from '../../SplashScreen';
 import RegisterScreen from '../Screens/AuthScreen/RegisterScreen';
+import SendCodeScreen from '../Screens/AuthScreen/SendCode';
+import ChangePasswordScreen from '../Screens/AuthScreen/changePassword';
 const AuthStack = createStackNavigator();
 
 const AuthStackScreen = ({ navigation }) => (
@@ -30,6 +32,20 @@ const AuthStackScreen = ({ navigation }) => (
       component={LoginScreen}
       options={{
         title: 'Đăng nhập tài khoản',
+      }}
+    />
+    <AuthStack.Screen
+      name="SendcodeScreen"
+      component={SendCodeScreen}
+      options={{
+        title: 'Khôi phục mật khẩu',
+      }}
+    />
+    <AuthStack.Screen
+      name="ChangePasswordScreen"
+      component={ChangePasswordScreen}
+      options={{
+        title: 'Thay đổi mật khẩu',
       }}
     />
     <AuthStack.Screen

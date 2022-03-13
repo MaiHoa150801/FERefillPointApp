@@ -16,13 +16,6 @@ const ProductDetailScreen = ({ route }) => {
   const { product } = route.params;
   const width = Dimensions.get('window').width;
   const height = (width / 100) * 60;
-  const images = [
-    'https://images.pexels.com/photos/10543007/pexels-photo-10543007.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-    'https://images.pexels.com/photos/7013458/pexels-photo-7013458.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    'https://images.pexels.com/photos/10323144/pexels-photo-10323144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    'https://images.pexels.com/photos/5421792/pexels-photo-5421792.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-  ];
-
   const [active, setActive] = useState(0);
 
   const change = ({ nativeEvent }) => {

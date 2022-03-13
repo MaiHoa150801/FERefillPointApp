@@ -24,7 +24,7 @@ const RegisterScreen = ({ navigation }) => {
     gender: Yup.string().required('Chọn giới tính!'),
     phone: Yup.number('Số điện thoại không hợp lệ!')
       .required('Vui lòng nhập số điện thoại!')
-      .min(1000000000, 'Số điện thoại không hợp lệ!'),
+      .min(100000000, 'Số điện thoại không hợp lệ!'),
     email: Yup.string()
       .email('Email không hợp lệ')
       .required('Vui lòng nhập Email!'),

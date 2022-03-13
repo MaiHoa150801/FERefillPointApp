@@ -6,45 +6,35 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Btn from '../../components/Button';
 import { Image } from 'react-native';
 import { Formik } from 'formik';
-import { forgotPasswordUser } from '../../service/AuthService';
 import * as SecureStore from 'expo-secure-store';
-export default function ForgotPasswordScreen({ navigation }) {
+import Line from '../../components/Line';
+import { updatePasswordUser } from '../../service/AuthService';
+export default function ChangePasswordScreen({ navigation }) {
   const [modalhiden, setModalhiden] = useState(false);
-  const [message, setMessage] = useState({
-    type: '',
-    message: '',
+  const validationSchema = Yup.object({
+    password: Yup.string().required('Password is required!').min(8),
+    cfPassword: Yup.string().when('password', {
+      is: (val) => (val && val.length > 0 ? true : false),
+      then: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
+    }),
   });
-  const forgotPassword = async (data) => {
-    const { email: emailForgot } = data;
+  const updatePassword = async (data) => {
+    const resetData = await SecureStore.getItemAsync('resetData');
+    const email = JSON.parse(resetData).email;
     try {
-      await forgotPasswordUser({ email: emailForgot }).then(async (e) => {
-        await SecureStore.setItemAsync(
-          'resetData',
-          JSON.stringify({ email: emailForgot })
-        );
-        setMessage({
-          type: 'Thành công',
-          message: `Mã xác thực đã được gửi về ${emailForgot}`,
-        });
-        setModalhiden(true);
-      });
+      await updatePasswordUser({ email: email, password: data.password });
+      await SecureStore.deleteItemAsync('resetData');
+      setModalhiden(true);
     } catch (error) {
       console.log(error);
-      setMessage({
-        type: 'Lỗi!',
-        message: `Email không tồn tại!`,
-      });
-      setModalhiden(true);
     }
   };
-  const validationSchema = Yup.object({
-    email: Yup.string().email('Invalid Email!').required('Email is required!'),
-  });
   return (
     <View style={styles.container}>
       <View style={{ alignItems: 'center' }}>
@@ -58,29 +48,43 @@ export default function ForgotPasswordScreen({ navigation }) {
         />
       </View>
       <Formik
-        initialValues={{ email: '' }}
+        initialValues={{ password: '', cfPassword: '' }}
         validationSchema={validationSchema}
         onSubmit={(values, formikActions) => {
-          forgotPassword(values);
+          updatePassword(values);
         }}
       >
         {(props) => (
           <>
-            <Text style={styles.textInputTitle}> Email</Text>
+            <Text style={styles.textInputTitle}> Mật khẩu mới</Text>
             <View style={styles.input}>
               <TextInput
                 style={styles.textInput}
-                onChangeText={props.handleChange('email')}
-                onBlur={props.handleBlur('email')}
-                value={props.values.email}
-                placeholder=" Nhập email"
+                onChangeText={props.handleChange('password')}
+                onBlur={props.handleBlur('password')}
+                value={props.values.password}
+                placeholder="Mật khẩu mới"
               />
             </View>
-            {props.touched.email && props.errors.email ? (
-              <Text style={styles.txtErr}>{props.errors.email}</Text>
+            {props.touched.password && props.errors.password ? (
+              <Text style={styles.txtErr}>{props.errors.password}</Text>
+            ) : null}
+            <Line height={20} />
+            <Text style={styles.textInputTitle}> Xác nhận lại mật khẩu</Text>
+            <View style={styles.input}>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={props.handleChange('cfPassword')}
+                onBlur={props.handleBlur('cfPassword')}
+                value={props.values.cfPassword}
+                placeholder="Xác nhận mật khẩu"
+              />
+            </View>
+            {props.touched.cfPassword && props.errors.cfPassword ? (
+              <Text style={styles.txtErr}>{props.errors.cfPassword}</Text>
             ) : null}
             <Btn
-              text="Nhận mã xác thực"
+              text="Thay đổi"
               textStyle={styles.textStyle}
               onPress={props.handleSubmit}
               style={styles.btnLogin}
@@ -88,7 +92,6 @@ export default function ForgotPasswordScreen({ navigation }) {
           </>
         )}
       </Formik>
-
       <Modal animationType="fade" visible={modalhiden} transparent={true}>
         <View style={styles.viewModel}>
           <View style={styles.viewModelContent}>
@@ -101,7 +104,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                   uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
                 }}
               />
-              <Text style={styles.successText}>{message.type}</Text>
+              <Text style={styles.successText}>Thành công</Text>
               <Text
                 style={{
                   textAlign: 'center',
@@ -109,15 +112,14 @@ export default function ForgotPasswordScreen({ navigation }) {
                   lineHeight: 25,
                 }}
               >
-                {message.message}
+                Thay đổi mật khẩu thành công
               </Text>
             </View>
             <TouchableOpacity
               style={styles.buttonOK}
               onPress={() => {
                 setModalhiden(false);
-                if (message.type == 'Thành công')
-                  navigation.navigate('SendcodeScreen');
+                navigation.navigate('LoginScreen');
               }}
             >
               <Text style={{ fontWeight: 'bold', color: 'white' }}>OK</Text>
