@@ -5,21 +5,29 @@ import AuthStackScreen from './AuthStacks';
 import HomeTab from './HomeTab';
 import { SignInContext, SignInContextProvider } from '../contexts/authContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import ShipperTab from './ShipperNavigation/ShipperTab';
 export default function Main() {
   const { signedIn, dispatchSignedIn } = useContext(SignInContext);
   useEffect(() => {
     getToken();
   }, []);
   const getToken = async () => {
-    const user = await AsyncStorage.getItem('user');
+    const userInfo = await SecureStore.getItemAsync('user');
     dispatchSignedIn({
       type: 'UPDATE_SIGN_IN',
-      payload: { userToken: user },
+      payload: { userToken: JSON.parse(userInfo) },
     });
   };
   return (
     <NavigationContainer>
-      {signedIn.userToken ? <HomeTab /> : <AuthStackScreen />}
+      {!signedIn.userToken ? (
+        <AuthStackScreen />
+      ) : signedIn.userToken.user.role == 'user' ? (
+        <HomeTab />
+      ) : (
+        <ShipperTab />
+      )}
     </NavigationContainer>
   );
 }

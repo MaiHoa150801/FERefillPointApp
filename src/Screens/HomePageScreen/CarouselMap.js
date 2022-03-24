@@ -6,6 +6,13 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import ModalMapShop from '../../components/ModalMapShop';
 import { getSalespersonData } from '../../service/SalespersonService';
+import MapViewDirections from 'react-native-maps-directions';
+import Btn from '../../components/Button';
+import { TouchableOpacity } from 'react-native';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyD7ajralK0m1ME4tJKq9dptNG3Ol835gos';
+import { io } from 'socket.io-client';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { getCurrent } from '../../service/ShipperMapService';
 
 export default class CarouselMap extends Component {
   static navigationOptions = {
@@ -16,49 +23,47 @@ export default class CarouselMap extends Component {
     markers: [],
     openModal: false,
     modalData: null,
+    shipperLocation: {
+      latitude: 16.052625,
+      longitude: 108.242156,
+    },
     shop: [],
-    coordinates: [
-      {
-        name: 'Burger',
-        latitude: 16.069103,
-        longitude: 108.234217,
-        image: require('./img/burger.jpg'),
-      },
-      {
-        name: 'Pizza',
-        latitude: 16.058865,
-        longitude: 108.241492,
-        image: require('./img/pizza.jpg'),
-      },
-      {
-        name: 'Soup',
-        latitude: 37.7665248,
-        longitude: -122.4165628,
-        image: require('./img/soup.jpg'),
-      },
-      {
-        name: 'Sushi',
-        latitude: 37.7834153,
-        longitude: -122.4527787,
-        image: require('./img/sushi.jpg'),
-      },
-      {
-        name: 'Curry',
-        latitude: 37.7948105,
-        longitude: -122.4596065,
-        image: require('./img/curry.jpg'),
-      },
-    ],
+    currentLocation: { latitude: 16.0621755, longitude: 108.2405321 },
+    destination: null,
+  };
+  socket = {
+    current: null,
   };
 
   componentDidMount() {
     this.requestLocationPermission();
     this.getData();
+    const unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.requestLocationPermission();
+      this.getData();
+    });
+    return unsubscribe;
   }
   getData = async () => {
     const response = await getSalespersonData();
     this.setState({
       shop: response.data.salespersons,
+    });
+    const data = await getCurrent();
+    this.setState({
+      shipperLocation: data.data.shipperMap,
+    });
+    this.socket.current = io('https://be-refill-mml5m.ondigitalocean.app/');
+    this.socket.current.on('connnection', () => {
+      console.log('connected to server');
+    });
+    this.socket.current.on('data', async (data) => {
+      await this.setState({
+        shipperLocation: {
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+      });
     });
   };
   showWelcomeMessage = () =>
@@ -73,19 +78,30 @@ export default class CarouselMap extends Component {
     ]);
 
   requestLocationPermission = async () => {
-    await Permissions.askAsync(Permissions.LOCATION_BACKGROUND);
+    let { status } = await Location.requestForegroundPermissionsAsync();
     this.locateCurrentPosition();
   };
 
   locateCurrentPosition = async () => {
     const position = await Location.getCurrentPositionAsync();
     let initialPosition = {
-      latitude: 16.039344,
-      longitude: 108.197712,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
       latitudeDelta: 19.039344,
       longitudeDelta: 110.197712,
     };
-
+    this._map.animateToRegion({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    });
+    this.setState({
+      currentLocation: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      },
+    });
     this.setState({ initialPosition });
   };
 
@@ -121,34 +137,55 @@ export default class CarouselMap extends Component {
       <Image style={styles.cardImage} source={item.image} />
     </View>
   );
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           ref={(map) => (this._map = map)}
+          followsUserLocation={true}
           showsUserLocation={true}
+          zoomEnabled={true}
           zoomControlEnabled={true}
           showsMyLocationButton={true}
+          onUserLocationChange={(e) => {
+            this.setState({
+              currentLocation: {
+                latitude: e.nativeEvent.coordinate.latitude,
+                longitude: e.nativeEvent.coordinate.longitude,
+              },
+            });
+          }}
           showsCompass={true}
           showsPointsOfInterest={true}
           style={styles.map}
           initialRegion={this.state.initialPosition}
         >
+          {this.state.destination && (
+            <MapViewDirections
+              origin={this.state.currentLocation}
+              destination={this.state.destination}
+              apikey={GOOGLE_MAPS_APIKEY}
+              strokeWidth={5}
+              strokeColor="green"
+            />
+          )}
+
           <Marker
-            draggable
-            coordinate={{ latitude: 37.7825259, longitude: -122.4351431 }}
-            image={require('../../../assets/caydoday.png')}
-          >
-            <Callout onPress={this.showWelcomeMessage}>
-              <Text>An Interesting city</Text>
-            </Callout>
-          </Marker>
+            draggables
+            coordinate={{
+              latitude: parseFloat(this.state.shipperLocation.latitude),
+              longitude: parseFloat(this.state.shipperLocation.longitude),
+            }}
+            image={require('../../../assets/shipper.png')}
+          ></Marker>
+
           {this.state.shop &&
             this.state.shop.map((marker, index) => (
               <Marker
                 draggable
-                key={marker.name}
+                key={index}
                 ref={(ref) => (this.state.markers[index] = ref)}
                 onPress={() => this.shopMapClick(marker)}
                 image={require('../../../assets/caydoday.png')}
@@ -163,12 +200,41 @@ export default class CarouselMap extends Component {
               </Marker>
             ))}
         </MapView>
+        {this.state.destination && (
+          <Btn
+            style={styles.buttonView}
+            text={
+              <TouchableOpacity
+                onPress={() =>
+                  this.setState({
+                    destination: null,
+                  })
+                }
+              >
+                <FontAwesome5 name="arrow-left" size={30} />
+              </TouchableOpacity>
+            }
+            textStyle={styles.txtBtnView}
+          />
+        )}
+
         <ModalMapShop
           openModal={this.state.openModal}
           modalData={this.state.modalData}
           closeModal={() => this.setState({ openModal: false })}
           nameShop={this.state.modalData ? this.state.modalData.name : ''}
           navigation={this.props.navigation}
+          setDirection={() => {
+            this.setState({
+              openModal: false,
+            });
+            this.setState({
+              destination: {
+                latitude: this.state.modalData.latitude,
+                longitude: this.state.modalData.longitude,
+              },
+            });
+          }}
         />
       </View>
     );
@@ -177,11 +243,13 @@ export default class CarouselMap extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
     marginTop: 30,
+    // ...StyleSheet.absoluteFillObject,
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
+    flex: 1,
   },
   carousel: {
     position: 'absolute',
@@ -194,6 +262,19 @@ const styles = StyleSheet.create({
     width: 300,
     padding: 24,
     borderRadius: 24,
+  },
+  buttonView: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 10,
+    paddingRight: 10,
+    top: 15,
+    borderRadius: 10,
+    position: 'absolute',
+  },
+  txtBtnView: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   cardImage: {
     height: 120,

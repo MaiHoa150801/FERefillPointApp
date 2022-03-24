@@ -3,7 +3,7 @@ import React from 'react';
 import Rating from './Rating';
 import { Ionicons } from '@expo/vector-icons';
 
-const AvatarView = ({ star, width, height, color, imageShop, nameShop }) => {
+const AvatarView = ({ star, width, height, color, image, text }) => {
   return (
     <View style={styles.avatarView}>
       <Image
@@ -13,7 +13,9 @@ const AvatarView = ({ star, width, height, color, imageShop, nameShop }) => {
           borderRadius: 25,
         }}
         source={{
-          uri: imageShop,
+          uri: image
+            ? image
+            : 'https://icon-library.com/images/icon-material/icon-material-12.jpg',
         }}
       />
       <View style={styles.nameShop}>
@@ -24,7 +26,7 @@ const AvatarView = ({ star, width, height, color, imageShop, nameShop }) => {
             fontSize: 16,
           }}
         >
-          {nameShop}
+          {text}
         </Text>
 
         <View style={styles.starView}>{Rating(star)}</View>
@@ -38,6 +40,7 @@ export default AvatarView;
 const styles = StyleSheet.create({
   avatarView: {
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     // marginLeft: 16,
   },

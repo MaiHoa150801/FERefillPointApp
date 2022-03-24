@@ -9,7 +9,7 @@ import { SignInContext } from '../contexts/authContext';
 export default function SettingScreen({ navigation, navigation: { goBack } }) {
   const { dispatchSignedIn } = useContext(SignInContext);
   const logout = async () => {
-    await AsyncStorage.removeItem('user');
+    await SecureStore.deleteItemAsync('user');
     dispatchSignedIn({
       type: 'UPDATE_SIGN_IN',
       payload: { userToken: null },
@@ -41,7 +41,6 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
         <Text
           style={{
             fontSize: 25,
-            color: '#eeeee',
             marginLeft: 100,
           }}
         >

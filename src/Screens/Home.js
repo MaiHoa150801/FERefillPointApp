@@ -81,6 +81,5 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     marginBottom: 5,
-    fontFamily: '',
   },
 });

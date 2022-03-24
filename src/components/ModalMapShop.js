@@ -24,6 +24,7 @@ const ModalMapShop = ({
   nameShop,
   navigation,
   modalData,
+  setDirection,
 }) => {
   return (
     <ModalBottom
@@ -63,7 +64,10 @@ const ModalMapShop = ({
       <View style={[styles.row, styles.mt10]}>
         <Btn
           text={
-            <TouchableOpacity style={[styles.row, styles.buttonDirection]}>
+            <TouchableOpacity
+              onPress={setDirection}
+              style={[styles.row, styles.buttonDirection]}
+            >
               <FontAwesome name="mail-forward" size={15} color="#1a73e8" />
               <Text style={styles.txtDirection}>Đường đi</Text>
             </TouchableOpacity>

@@ -21,6 +21,9 @@ const verifyCode = (data) => {
 const updatePasswordUser = (data) => {
   return CallAPI('password/reset', 'post', data);
 };
+const updatePasswordAsyn = (data) => {
+  return CallAPI('password/update', 'put', data);
+};
 export {
   Register,
   LoginUser,
@@ -29,4 +32,5 @@ export {
   forgotPasswordUser,
   verifyCode,
   updatePasswordUser,
+  updatePasswordAsyn,
 };

@@ -8,56 +8,105 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-
-import Btn from '../components/Button';
-
+import { Ionicons, Entypo } from '@expo/vector-icons';
 import Searchbar from '../components/SearchBar';
 import AvatarView from '../components/AvatarView';
-import ProductCard from '../components/cards/ProductCard';
-import Rating from '../components/Rating';
+import * as SecureStore from 'expo-secure-store';
 import { getOneSalespersonData } from '../service/SalespersonService';
+import BadgedIcon from '../components/BadgedIcon';
+import { getCart } from '../service/CartService';
+import {
+  getUserVoucher,
+  getVoucher,
+  userSaveVoucher,
+} from '../service/VoucherService';
+import CardVoucher from '../components/CardVoucher';
 const ShopDetailScreen = ({ navigation, route }) => {
-  const navigation = useNavigation();
   const shopId = route.params.shopId;
-  console.log(shopId);
   const [data, setData] = useState(null);
+  const [voucher, setVoucher] = useState(null);
+  const [uservoucher, setUserVoucher] = useState(null);
+  const [userusevoucher, setUserUseVoucher] = useState(null);
+  const [numberCart, setNumberCart] = useState(0);
   const image = {
     uri: 'https://fuwa.com.vn/wp-content/uploads/2020/06/ALL-1024x661.jpg',
   };
   useEffect(() => {
-    getData();
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData();
+    });
+    return unsubscribe;
   }, []);
   const getData = async () => {
+    const profile = await SecureStore.getItemAsync('user');
+    const user = await JSON.parse(profile).user;
     const response = await getOneSalespersonData(shopId);
-    setData(response.data.salesperson[0]);
+    const voucher = await getVoucher();
+    const userVou = await getUserVoucher(user._id);
+    await setUserVoucher(
+      userVou.data.voucher !== null
+        ? userVou.data.voucher.list_voucher_id
+        : null
+    );
+    await setUserUseVoucher(
+      userVou.data.voucher !== null
+        ? userVou.data.voucher.list_voucher_used
+        : null
+    );
+    await setVoucher(voucher.data.voucher);
+    const cart = await getCart(response.data.salesperson[0].name);
+    if (cart) setNumberCart(cart.length);
+    await setData(response.data.salesperson[0]);
+  };
+  const saveVoucher = async (voucherId) => {
+    const profile = await SecureStore.getItemAsync('user');
+    const user = await JSON.parse(profile).user;
+    const data = {
+      account_id: user._id,
+      voucher_id: voucherId,
+    };
+    const res = await userSaveVoucher(data);
+    getData();
   };
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.overlayView}>
           <View style={styles.searchView}>
-            <TouchableOpacity onPress={() => navigation.navigate('GreenMap')}>
+            <TouchableOpacity
+              style={{
+                width: '15%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => navigation.navigate('GreenMap')}
+            >
               <Ionicons
                 name="arrow-back"
-                size={23}
+                size={30}
                 color={'#ffff'}
                 style={styles.icon}
               />
             </TouchableOpacity>
-            <Searchbar
-              textSearch={'Search'}
-              style={styles.searchBar}
-            ></Searchbar>
+            <View
+              style={{
+                width: '70%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Searchbar
+                textSearch={'Search'}
+                style={styles.searchBar}
+              ></Searchbar>
+            </View>
           </View>
 
           <View style={styles.avatarView}>
             {data && (
               <AvatarView
-                imageShop={data.logo}
-                nameShop={data.name}
+                image={data.logo}
+                text={data.name}
                 star={4}
                 height={40}
                 width={40}
@@ -65,46 +114,52 @@ const ShopDetailScreen = ({ navigation, route }) => {
               ></AvatarView>
             )}
             <TouchableOpacity
-              onPress={() => navigation.navigate('ShoppingCart')}
+              onPress={() =>
+                navigation.navigate('ShoppingCart', {
+                  shop: data.name,
+                  shopId: data.id,
+                })
+              }
               style={styles.shoppingCart}
             >
-              <Entypo name="shopping-cart" size={25} color={'white'} />
+              <BadgedIcon name="shopping-cart" number={numberCart} />
             </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.voucherText}>Voucher</Text>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.voucherView}>
-            <View style={styles.voucherViewLeft}>
-              <Text style={styles.voucherName}>Giảm 15k</Text>
-              <Text style={styles.voucherLimited}>Đơn tổi thiểu 199k</Text>
-              <Text style={styles.voucherExpiry}>HSD: 31.3.2022</Text>
-            </View>
-            <View style={styles.voucherViewRight}>
-              <Btn
-                text="Lưu"
-                style={styles.saveBtn}
-                textStyle={styles.saveText}
-              ></Btn>
-            </View>
+        {voucher && (
+          <View>
+            <Text style={styles.voucherText}>Voucher</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {voucher.map((e) => (
+                <CardVoucher
+                  description={e.description}
+                  expiry_date={e.expiry_date}
+                  saved={
+                    userusevoucher !== null &&
+                    (uservoucher.indexOf(e.id) !== -1
+                      ? true
+                      : userusevoucher.indexOf(e.id) !== -1
+                      ? true
+                      : false)
+                  }
+                  type={
+                    userusevoucher !== null &&
+                    userusevoucher.indexOf(e.id) !== -1
+                      ? true
+                      : false
+                  }
+                  saveVoucher={() => saveVoucher(e.id)}
+                />
+              ))}
+            </ScrollView>
           </View>
-          <View style={styles.voucherView}>
-            <View style={styles.voucherViewLeft}>
-              <Text style={styles.voucherName}>Giảm 15k</Text>
-              <Text style={styles.voucherLimited}>Đơn tổi thiểu 199k</Text>
-              <Text style={styles.voucherExpiry}>HSD: 31.3.2022</Text>
-            </View>
-            <View style={styles.voucherViewRight}>
-              <Btn
-                text="Lưu"
-                style={styles.saveBtn}
-                textStyle={styles.saveText}
-              ></Btn>
-            </View>
-          </View>
-        </ScrollView>
+        )}
+
         <Text style={styles.productText}>Sản phẩm</Text>
         <View style={styles.productLists}>
           <View style={styles.productList}>
@@ -114,7 +169,10 @@ const ShopDetailScreen = ({ navigation, route }) => {
                   <View style={styles.productItemView}>
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('ProductDetail', { product: e })
+                        navigation.navigate('ProductDetail', {
+                          product: e,
+                          shop: data,
+                        })
                       }
                     >
                       <Image
@@ -159,58 +217,6 @@ const styles = StyleSheet.create({
   image: {
     marginLeft: -16,
   },
-  icon: {
-    marginLeft: 32,
-    paddingTop: 16,
-  },
-  searchBar: {
-    marginTop: -27,
-    paddingRight: 16,
-    paddingLeft: 66,
-  },
-  voucherView: {
-    flexDirection: 'row',
-    paddingLeft: 16,
-  },
-  voucherViewLeft: {
-    padding: 10,
-    borderColor: '#E8833A',
-    borderWidth: 0.7,
-    backgroundColor: '#fff2e6',
-  },
-  voucherViewRight: {
-    borderColor: '#E8833A',
-    borderBottomWidth: 0.7,
-    borderTopWidth: 0.7,
-    borderRightWidth: 0.7,
-    padding: 10,
-    justifyContent: 'center',
-    backgroundColor: '#fff2e6',
-  },
-  saveBtn: {
-    borderRadius: 10,
-  },
-  saveText: {
-    backgroundColor: '#E8833A',
-    padding: 5,
-    paddingHorizontal: 20,
-    color: 'white',
-    fontWeight: '700',
-    borderRadius: 3,
-  },
-  voucherName: {
-    color: '#E8833A',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  voucherLimited: {
-    color: '#E8833A',
-    fontWeight: '700',
-  },
-  voucherExpiry: {
-    color: '#6F7D89',
-    fontWeight: '600',
-  },
   productText: {
     color: '#1B71B9',
     fontWeight: '700',
@@ -250,8 +256,9 @@ const styles = StyleSheet.create({
 
   searchView: {
     paddingTop: 30,
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   reviewItemStar: {
     width: 14,
@@ -266,6 +273,7 @@ const styles = StyleSheet.create({
   avatarView: {
     paddingLeft: 16,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   listProduct: {
     flexDirection: 'row',
@@ -275,8 +283,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   shoppingCart: {
-    paddingLeft: 60,
-    paddingTop: 10,
+    marginLeft: 'auto',
+    marginRight: 20,
   },
   unit_price: {
     color: 'gray',

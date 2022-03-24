@@ -5,14 +5,19 @@ import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { colors } from '../global/styles';
 import * as SecureStore from 'expo-secure-store';
 import { auth } from '../../firebase';
+import { getRefillPoint } from '../service/RefillPointService';
 const HeaderHome = () => {
   const [user, setUser] = useState(null);
+  const [refillPoint, setRefillPoint] = useState(0);
   useEffect(() => {
     getUser();
   }, []);
   const getUser = async () => {
     const profile = await SecureStore.getItemAsync('user');
-    setUser(JSON.parse(profile).user);
+    const user = JSON.parse(profile).user;
+    setUser(user);
+    const point = await getRefillPoint(user._id);
+    setRefillPoint(point.data.refillPoint.score);
   };
   return (
     <>
@@ -30,7 +35,7 @@ const HeaderHome = () => {
           />
           <View style={styles.title}>
             <Text style={styles.txtTitle}>{user.name}</Text>
-            <Text style={styles.txtTitle}>100RP</Text>
+            <Text style={styles.txtTitle}>{refillPoint}RP</Text>
           </View>
           <View style={styles.bell}>
             <FontAwesome name="bell" size={35} color={'#ffffff'} />

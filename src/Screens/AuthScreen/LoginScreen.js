@@ -26,17 +26,16 @@ export default function LoginScreen({ navigation, reloadApp }) {
     try {
       const user = await LoginUser(data);
       await SecureStore.setItemAsync('user', JSON.stringify(user.data));
-      saveUser(user.data.token);
+      saveUser(user.data);
     } catch (error) {
       console.log(error);
       showToastWithGravity('Invalid Email or Password!');
     }
   };
-  const saveUser = async (token) => {
-    await AsyncStorage.setItem('user', token);
+  const saveUser = async (data) => {
     dispatchSignedIn({
       type: 'UPDATE_SIGN_IN',
-      payload: { userToken: token },
+      payload: { userToken: data },
     });
   };
   const signInWithGoogleAsync = async () => {
@@ -61,7 +60,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
         try {
           const user = await LoginGoogle(data);
           await SecureStore.setItemAsync('user', JSON.stringify(user.data));
-          await saveUser(user.data.token);
+          await saveUser(user.data);
         } catch (error) {
           console.log(error);
         }
@@ -88,7 +87,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
       try {
         const user = await LoginFacebook(data);
         await SecureStore.setItemAsync('user', JSON.stringify(user.data));
-        await saveUser(user.data.token);
+        await saveUser(user.data);
       } catch (error) {
         console.log(error);
       }

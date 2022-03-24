@@ -1,44 +1,21 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-export const users = [
-  {
-    id: 1,
-    name: "Lê Ngọc Vĩ",
-    point: 550,
-  },
-  {
-    id: 2,
-    name: "Nguyễn Thị Thu",
-    point: 450,
-  },
-  {
-    id: 3,
-    name: "Lê Thị Mai Hoa",
-    point: 350,
-  },
-  {
-    id: 4,
-    name: "Hồ Thị Hưu",
-    point: 250,
-  },
-  {
-    id: 5,
-    name: "Nguyễn Văn Sỷ",
-    point: 150,
-  },
-  {
-    id: 6,
-    name: "Lê Quang Kỳ",
-    point: 50,
-  },
-  {
-    id: 7,
-    name: "Phạm Anh Tuấn",
-    point: 30,
-  },
-];
-export default function RankScreen() {
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getAllRefillPoint } from '../service/RefillPointService';
+export default function RankScreen({ navigation }) {
+  const [refillPoints, setRefillPoints] = useState([]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getPoint();
+    });
+    return unsubscribe;
+  }, []);
+  const getPoint = async () => {
+    const {
+      data: { refillPoint },
+    } = await getAllRefillPoint();
+    setRefillPoints(refillPoint);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.title}>
@@ -46,15 +23,16 @@ export default function RankScreen() {
       </View>
       <View style={styles.content}>
         <ScrollView>
-          {users.map((user, index) => (
-            <View key={index} style={styles.body}>
-              <View style={styles.viewText}>
-                <Text style={styles.text1}>{user.id}</Text>
+          {refillPoints.length > 0 &&
+            refillPoints.map((point, index) => (
+              <View key={index} style={styles.body}>
+                <View style={styles.viewText}>
+                  <Text style={styles.text1}>{index + 1}</Text>
+                </View>
+                <Text style={styles.text}>{point.account_id.name}</Text>
+                <Text style={styles.text}>{point.score} GP</Text>
               </View>
-              <Text style={styles.text}>{user.name}</Text>
-              <Text style={styles.text}>{user.point} GP</Text>
-            </View>
-          ))}
+            ))}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -68,41 +46,41 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   title: {
-    width: "100%",
+    width: '100%',
     height: 70,
-    backgroundColor: "rgb(18, 136, 58)",
+    backgroundColor: 'rgb(18, 136, 58)',
   },
   txtTitle: {
-    color: "#000000",
+    color: '#000000',
     fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     paddingVertical: 20,
   },
   body: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#eee",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#eee',
     height: 50,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
   },
   viewText: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 40,
     width: 40,
     borderRadius: 20,
-    backgroundColor: "#bdc750",
+    backgroundColor: '#bdc750',
   },
   text1: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#c75058",
+    fontWeight: 'bold',
+    color: '#c75058',
   },
   text: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#65c750",
+    fontWeight: 'bold',
+    color: '#65c750',
   },
 });

@@ -8,19 +8,12 @@ import * as Yup from 'yup';
 import Btn from '../../components/Button';
 import FieldInput from '../../components/Form/FieldInput';
 import { Picker } from '@react-native-picker/picker';
-import {
-  createUserWithEmailAndPassword,
-  signInAnonymously,
-  updateProfile,
-} from 'firebase/auth';
-import { auth } from '../../../firebase';
 import { Image } from 'react-native';
-import { RadioButton } from 'react-native-paper';
 import { Register } from '../../service/AuthService';
-import { Alert } from 'react-native';
 const RegisterScreen = ({ navigation }) => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Vui lòng nhập tên!'),
+    address: Yup.string().required('Vui lòng nhập địa chỉ!'),
     gender: Yup.string().required('Chọn giới tính!'),
     phone: Yup.number('Số điện thoại không hợp lệ!')
       .required('Vui lòng nhập số điện thoại!')
@@ -31,7 +24,7 @@ const RegisterScreen = ({ navigation }) => {
     password: Yup.string()
       .required('Vui lòng nhập mật khẩu!')
       .min(6, 'Mật khẩu phải lớn hơn 6 kí tự!'),
-    confirmPassword: Yup.string().when('password', {
+    cpassword: Yup.string().when('password', {
       is: (val) => (val && val.length > 0 ? true : false),
       then: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
     }),
@@ -48,8 +41,9 @@ const RegisterScreen = ({ navigation }) => {
     gender: '',
     phone: '',
     email: '',
+    address: '',
     password: '',
-    confirmPassword: '',
+    cpassword: '',
   };
   const register = async (values) => {
     try {
@@ -115,6 +109,11 @@ const RegisterScreen = ({ navigation }) => {
                 />
                 <FieldInput
                   formProps={props}
+                  name="address"
+                  placeholder="Địa chỉ"
+                />
+                <FieldInput
+                  formProps={props}
                   name="email"
                   placeholder="Email"
                 />
@@ -126,7 +125,7 @@ const RegisterScreen = ({ navigation }) => {
                 />
                 <FieldInput
                   formProps={props}
-                  name="confirmPassword"
+                  name="cpassword"
                   placeholder="Xác nhận lại mật khẩu"
                   type="password"
                 />
