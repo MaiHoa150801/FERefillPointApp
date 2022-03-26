@@ -3,7 +3,7 @@ import CallAPI from './CallApiService';
 const GetRatingProductAsyn = (id) => {
   return CallAPI(`ratingproduct/${id}`);
 };
-const RatingProductAsyn = (data) => {
-  return CallAPI('ratingproduct', 'post', data);
+const RatingProductAsyn = (data, product_id) => {
+  return CallAPI(`ratingproduct/${product_id}`, 'post', data);
 };
 export { RatingProductAsyn, GetRatingProductAsyn };

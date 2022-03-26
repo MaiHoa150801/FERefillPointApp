@@ -9,9 +9,9 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "marginLeft":"20%",
-      "marginRight":"20%",
-      "with":"60%"
+      "marginLeft": "20%",
+      "marginRight": "20%",
+      "with": "60%"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -26,7 +26,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "host.exp.exponent"
     },
     "web": {
       "favicon": "./assets/favicon.png"

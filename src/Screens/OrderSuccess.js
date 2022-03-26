@@ -50,8 +50,8 @@ const OrderSuccess = ({ route, navigation }) => {
                 {list_order_id.map((p, index2) => {
                   const { product } = p;
                   return (
-                    <View>
-                      <View style={styles.orderProduct} key={index2}>
+                    <View key={index2}>
+                      <View style={styles.orderProduct}>
                         <Image
                           style={styles.imageProduct}
                           resizeMode="cover"

@@ -49,7 +49,7 @@ export default class OrderFollow extends Component {
     this.setState({
       shipperLocation: data.data.shipperMap,
     });
-    this.socket.current = io('http://refillpoint.cleverapps.io');
+    this.socket.current = io('http://refillpointapp.cleverapps.io');
     this.socket.current.on('connnection', () => {
       console.log('connected to server');
     });

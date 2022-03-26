@@ -5,11 +5,14 @@ import { StatusBar } from 'react-native';
 import { LogBox } from 'react-native';
 import { View } from 'react-native';
 import { SignInContextProvider } from './src/contexts/authContext';
+import { MenuProvider } from 'react-native-popup-menu';
 LogBox.ignoreAllLogs();
 export default function App() {
   return (
     <SignInContextProvider>
-      <Main />
+      <MenuProvider>
+        <Main />
+      </MenuProvider>
     </SignInContextProvider>
   );
 }

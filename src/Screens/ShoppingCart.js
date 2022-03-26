@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  ToastAndroid,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as SecureStore from 'expo-secure-store';
 import {
@@ -326,6 +319,7 @@ const ShoppingCart = ({ navigation, route }) => {
         <View style={{ paddingHorizontal: 16 }}>
           {product ? product.map(renderProducts) : null}
         </View>
+
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -471,7 +465,7 @@ const ShoppingCart = ({ navigation, route }) => {
           <Text
             style={{
               fontSize: 14,
-              fontWeight: '650',
+              fontWeight: '600',
               letterSpacing: 1,
               color: '#ffffff',
               textTransform: 'uppercase',
@@ -681,10 +675,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btnClose: {
-    padding: 10,
+    padding: 2,
     borderRadius: 4,
     position: 'absolute',
-    top: 5,
-    left: 10,
+    top: 10,
+    left: 5,
   },
 });

@@ -17,7 +17,6 @@ import {
   LoginGoogle,
   LoginUser,
 } from '../../service/AuthService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SignInContext } from '../../contexts/authContext';
 export default function LoginScreen({ navigation, reloadApp }) {
   const [hidenpassword, setHidenPassword] = useState(true);
@@ -85,6 +84,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
         avatar: res.picture.data.url,
       };
       try {
+        console.log(data);
         const user = await LoginFacebook(data);
         await SecureStore.setItemAsync('user', JSON.stringify(user.data));
         await saveUser(user.data);

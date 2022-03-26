@@ -15,7 +15,7 @@ const HomeTab = (props) => {
       }}
       screenOptions={{
         tabBarActiveTintColor: colors.buttons,
-        tabBarStyle: [{ display: 'flex' }, null],
+        tabBarStyle: [{ display: 'flex' }],
       }}
     >
       {bottomRoutes.map((e, index) => {

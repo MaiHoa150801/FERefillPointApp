@@ -1,10 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useContext } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
 import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SignInContext } from '../contexts/authContext';
 export default function SettingScreen({ navigation, navigation: { goBack } }) {
   const { dispatchSignedIn } = useContext(SignInContext);

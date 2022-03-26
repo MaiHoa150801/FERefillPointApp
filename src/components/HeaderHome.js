@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { colors } from '../global/styles';
 import * as SecureStore from 'expo-secure-store';
-import { auth } from '../../firebase';
 import { getRefillPoint } from '../service/RefillPointService';
 const HeaderHome = () => {
   const [user, setUser] = useState(null);

@@ -23,10 +23,6 @@ export default class CarouselMap extends Component {
     markers: [],
     openModal: false,
     modalData: null,
-    shipperLocation: {
-      latitude: 16.052625,
-      longitude: 108.242156,
-    },
     shop: [],
     currentLocation: { latitude: 16.0621755, longitude: 108.2405321 },
     destination: null,
@@ -48,22 +44,6 @@ export default class CarouselMap extends Component {
     const response = await getSalespersonData();
     this.setState({
       shop: response.data.salespersons,
-    });
-    const data = await getCurrent();
-    this.setState({
-      shipperLocation: data.data.shipperMap,
-    });
-    this.socket.current = io('https://be-refill-mml5m.ondigitalocean.app/');
-    this.socket.current.on('connnection', () => {
-      console.log('connected to server');
-    });
-    this.socket.current.on('data', async (data) => {
-      await this.setState({
-        shipperLocation: {
-          latitude: data.latitude,
-          longitude: data.longitude,
-        },
-      });
     });
   };
   showWelcomeMessage = () =>
@@ -171,15 +151,6 @@ export default class CarouselMap extends Component {
               strokeColor="green"
             />
           )}
-
-          <Marker
-            draggables
-            coordinate={{
-              latitude: parseFloat(this.state.shipperLocation.latitude),
-              longitude: parseFloat(this.state.shipperLocation.longitude),
-            }}
-            image={require('../../../assets/shipper.png')}
-          ></Marker>
 
           {this.state.shop &&
             this.state.shop.map((marker, index) => (

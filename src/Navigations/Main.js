@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthStackScreen from './AuthStacks';
 import HomeTab from './HomeTab';
 import { SignInContext, SignInContextProvider } from '../contexts/authContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import ShipperTab from './ShipperNavigation/ShipperTab';
 export default function Main() {

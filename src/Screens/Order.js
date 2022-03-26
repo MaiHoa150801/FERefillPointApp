@@ -51,7 +51,7 @@ const Order = ({ route, navigation }) => {
                 {list_order_id.map((p, index2) => {
                   const { product } = p;
                   return (
-                    <View>
+                    <View key={index2}>
                       <View style={styles.orderProduct} key={index2}>
                         <Image
                           style={styles.imageProduct}

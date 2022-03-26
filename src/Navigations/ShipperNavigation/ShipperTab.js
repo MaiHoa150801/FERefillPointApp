@@ -16,7 +16,7 @@ const ShipperTab = (props) => {
     <HomeTabs.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.buttons,
-        tabBarStyle: [{ display: 'flex' }, null],
+        tabBarStyle: [{ display: 'flex' }],
       }}
     >
       <HomeTabs.Screen

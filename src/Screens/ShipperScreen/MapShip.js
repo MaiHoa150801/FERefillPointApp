@@ -30,7 +30,7 @@ export default class Map extends Component {
   }
   showToast = (message) => {};
   getOrder = async () => {
-    this.socket.current = io('http://192.168.56.1:8080');
+    this.socket.current = io('http://refillpointapp.cleverapps.io');
     this.socket.current.on('connnection', () => {
       console.log('connected to server');
     });
@@ -40,8 +40,10 @@ export default class Map extends Component {
       });
       if (data.message != null) {
         this.toast.show(
-          <View>
-            <Text>{data.message}</Text>
+          <View style={{ padding: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+              {data.message}
+            </Text>
           </View>
         );
       }

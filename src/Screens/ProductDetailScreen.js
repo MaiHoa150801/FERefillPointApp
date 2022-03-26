@@ -137,9 +137,9 @@ const ProductDetailScreen = ({ route, navigation }) => {
               ))}
             </ScrollView>
             <View style={styles.pagination}>
-              {product.list_image.map((i, k) => (
+              {product.list_image.map((k, index) => (
                 <Text
-                  key={k}
+                  key={index}
                   style={
                     k == active ? styles.pagingActiveText : styles.pagingText
                   }
@@ -240,7 +240,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
               <MaterialCommunityIcons name="minus" style={styles.actionIcon} />
             )}
           </TouchableOpacity>
-          <Text style={{ fontWeight: '650', fontSize: 16 }}>{quantity}</Text>
+          <Text style={{ fontWeight: '600', fontSize: 16 }}>{quantity}</Text>
           <TouchableOpacity
             style={styles.borderView}
             onPress={() => {

@@ -62,7 +62,7 @@ const RatingProduct = ({ route, navigation }) => {
       list_order_id: order_id,
     };
     try {
-      const res = await RatingProductAsyn(data);
+      const res = await RatingProductAsyn(data, product._id);
       navigation.navigate('AccountScreen');
     } catch (err) {
       console.log(err);

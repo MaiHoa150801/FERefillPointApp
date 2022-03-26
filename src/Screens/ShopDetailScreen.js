@@ -105,6 +105,7 @@ const ShopDetailScreen = ({ navigation, route }) => {
           <View style={styles.avatarView}>
             {data && (
               <AvatarView
+                key={data.logo}
                 image={data.logo}
                 text={data.name}
                 star={4}
@@ -135,8 +136,9 @@ const ShopDetailScreen = ({ navigation, route }) => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             >
-              {voucher.map((e) => (
+              {voucher.map((e, index) => (
                 <CardVoucher
+                  key={index}
                   description={e.description}
                   expiry_date={e.expiry_date}
                   saved={
@@ -164,9 +166,9 @@ const ShopDetailScreen = ({ navigation, route }) => {
         <View style={styles.productLists}>
           <View style={styles.productList}>
             {data &&
-              data.list_product.map((e) => {
+              data.list_product.map((e, index) => {
                 return (
-                  <View style={styles.productItemView}>
+                  <View style={styles.productItemView} key={index}>
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('ProductDetail', {
