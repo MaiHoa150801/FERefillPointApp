@@ -1,11 +1,11 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
-import { View, Text } from 'react-native';
-import Home from '../Screens/Home';
-import CommunitySPScreen from '../Screens/HomePageScreen/CommunitySPScreen';
-import GreenWaveScreen from '../Screens/HomePageScreen/GreenWaveScreen';
-import RecommendScreen from '../Screens/HomePageScreen/RecommendScreen';
-import ScoreRefillScreen from '../Screens/HomePageScreen/ScoreRefillScreen';
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import { View, Text } from "react-native";
+import Home from "../Screens/Home";
+import CommunitySPScreen from "../Screens/HomePageScreen/CommunitySPScreen";
+import GreenWaveScreen from "../Screens/HomePageScreen/GreenWaveScreen";
+import RecommendScreen from "../Screens/HomePageScreen/RecommendScreen";
+import ScoreRefillScreen from "../Screens/HomePageScreen/ScoreRefillScreen";
 
 const HomeStack = createStackNavigator();
 const HomePageStack = () => {

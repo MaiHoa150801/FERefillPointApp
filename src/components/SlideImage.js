@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, Image } from 'react-native';
-import ViewSlider from 'react-native-view-slider';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
+import ViewSlider from "react-native-view-slider";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default function Slide({ images, auto }) {
   return (
@@ -42,21 +42,21 @@ export default function Slide({ images, auto }) {
 const styles = StyleSheet.create({
   viewBox: {
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     width: width,
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     height: 150,
   },
   slider: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
   },
   dotContainer: {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    bottom: 15,
+    backgroundColor: "transparent",
+    position: "absolute",
+    bottom: -5,
   },
 });
