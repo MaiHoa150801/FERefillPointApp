@@ -117,7 +117,7 @@ export default class Map extends Component {
   };
   render() {
     return (
-      <View>
+      <View style={{ marginTop: 20 }}>
         <MapView
           provider={PROVIDER_GOOGLE}
           ref={(map) => (this._map = map)}

@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
       saveUser(user.data);
     } catch (error) {
       console.log(error);
-      showToastWithGravity('Invalid Email or Password!');
+      showToastWithGravity('Email hoặc số điện thoại không đúng!');
     }
   };
   const saveUser = async (data) => {
@@ -84,7 +84,6 @@ export default function LoginScreen({ navigation, reloadApp }) {
         avatar: res.picture.data.url,
       };
       try {
-        console.log(data);
         const user = await LoginFacebook(data);
         await SecureStore.setItemAsync('user', JSON.stringify(user.data));
         await saveUser(user.data);

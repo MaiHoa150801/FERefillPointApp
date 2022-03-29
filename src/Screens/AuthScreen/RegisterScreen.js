@@ -47,7 +47,6 @@ const RegisterScreen = ({ navigation }) => {
   };
   const register = async (values) => {
     try {
-      console.log(values);
       const response = await Register(values);
       navigation.navigate('LoginScreen');
     } catch (error) {

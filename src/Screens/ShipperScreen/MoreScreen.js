@@ -7,8 +7,9 @@ import { ScrollView } from 'react-native';
 import Btn from '../../components/Button';
 import * as SecureStore from 'expo-secure-store';
 import { SignInContext } from '../../contexts/authContext';
+import { TouchableOpacity } from 'react-native';
 const { width } = Dimensions.get('window');
-const MoreScreen = () => {
+const MoreScreen = ({ navigation }) => {
   const { dispatchSignedIn } = useContext(SignInContext);
   const logout = async () => {
     await SecureStore.deleteItemAsync('user');
@@ -34,7 +35,8 @@ const MoreScreen = () => {
 
       <ScrollView style={styles.content}>
         <Divider />
-        <View
+        <TouchableOpacity
+          onPress={() => navigation.navigate('OrderList')}
           style={[
             styles.row,
             { justifyContent: 'space-between', paddingVertical: 5 },
@@ -42,7 +44,7 @@ const MoreScreen = () => {
         >
           <Text style={{ fontSize: 20 }}>Đơn hàng đã giao</Text>
           <FontAwesome5 name="angle-right" size={30} />
-        </View>
+        </TouchableOpacity>
         <Divider />
         <View
           style={[

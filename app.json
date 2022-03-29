@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "KindicareApp",
-    "slug": "KindicareApp",
+    "name": "RifillPointApp",
+    "slug": "RifillPointApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "host.exp.exponent"
+      "package": "com.RifillPointApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,44 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
+import { getShipperOrder } from '../../service/OrderService';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { Image } from 'react-native';
-import Line from '../components/Line';
+import Line from '../../components/Line';
 import { Divider } from 'react-native-elements/dist/divider/Divider';
-import * as SecureStore from 'expo-secure-store';
-import Btn from '../components/Button';
-import { getOrder, updateOrder } from '../service/OrderService';
-const Order = ({ route, navigation }) => {
-  const { status } = route.params;
+import Btn from '../../components/Button';
+const OrderSuccessShipper = ({ navigation }) => {
   const [order, setOrder] = useState(null);
   useEffect(() => {
-    getData();
+    const unsubscribe = navigation.addListener('focus', () => {
+      getOrder();
+    });
+    return unsubscribe;
   }, []);
-  const getData = async () => {
-    const profile = await SecureStore.getItemAsync('user');
-    const user = await JSON.parse(profile).user;
-    const res = await getOrder(user._id, status);
+  const getOrder = async () => {
+    const res = await getShipperOrder('Đã giao hàng');
     setOrder(res.data.listOrder);
-  };
-  const cancleOrder = (orderId) => {
-    Alert.alert(
-      'Bạn có muốn hủy đơn hàng này',
-      'Nếu hủy quá nhiều đơn hàng tài khoản bạn có thể bị khóa!',
-      [
-        {
-          text: 'Thoát',
-          style: 'cancel',
-        },
-        {
-          text: 'Xác nhận',
-          onPress: async () => {
-            await updateOrder({ status: 'Đã hủy' }, orderId);
-            getData();
-          },
-          style: 'ok',
-        },
-      ]
-    );
   };
   return (
     <View style={styles.container}>
@@ -54,6 +33,7 @@ const Order = ({ route, navigation }) => {
               total_money,
               salesperson_id,
               date_refill,
+              account_id: user,
             } = e;
             return (
               <View style={styles.viewOrder} key={index}>
@@ -64,15 +44,20 @@ const Order = ({ route, navigation }) => {
                       {salesperson_id.name}
                     </Text>
                   </View>
-                  <Text style={styles.txtStatus}>{status}</Text>
+                  <Text style={styles.txtStatus}>Đã giao hàng</Text>
                 </View>
                 <Line height={10} />
                 <Divider style={styles.divider} />
+                <View>
+                  <Text style={{ fontSize: 17 }}>Khách hàng</Text>
+                  <Text>{user.name}</Text>
+                  <Text>{user.phone}</Text>
+                </View>
                 {list_order_id.map((p, index2) => {
                   const { product } = p;
                   return (
                     <View key={index2}>
-                      <View style={styles.orderProduct} key={index2}>
+                      <View style={styles.orderProduct}>
                         <Image
                           style={styles.imageProduct}
                           resizeMode="cover"
@@ -133,29 +118,6 @@ const Order = ({ route, navigation }) => {
                     <Text style={styles.txtPrice}>đ{total_money}</Text>
                   </Text>
                 </View>
-                <Divider style={styles.divider} />
-                {status == 'Đang giao hàng' && (
-                  <View style={styles.orderFollow}>
-                    <Btn
-                      onPress={() =>
-                        navigation.navigate('OrderFollowScreen', { order: e })
-                      }
-                      text="Theo dõi đơn hàng"
-                      textStyle={styles.txtBtn}
-                      style={styles.btn}
-                    />
-                  </View>
-                )}
-                {status == 'Chờ xác nhận' && (
-                  <View style={styles.orderFollow}>
-                    <Btn
-                      onPress={() => cancleOrder(e.id)}
-                      text="Hủy đơn hàng"
-                      textStyle={styles.txtBtn}
-                      style={styles.btnHuy}
-                    />
-                  </View>
-                )}
               </View>
             );
           })}
@@ -164,7 +126,7 @@ const Order = ({ route, navigation }) => {
   );
 };
 
-export default Order;
+export default OrderSuccessShipper;
 
 const styles = StyleSheet.create({
   container: {
@@ -220,18 +182,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   btn: {
-    padding: 12,
+    padding: 7,
     backgroundColor: 'green',
-    width: 150,
+    width: 100,
     justifyContent: 'center',
     borderRadius: 5,
-  },
-  btnHuy: {
-    padding: 12,
-    backgroundColor: 'red',
-    width: 150,
-    justifyContent: 'center',
-    borderRadius: 5,
+    marginTop: 10,
   },
   txtBtn: {
     fontSize: 15,

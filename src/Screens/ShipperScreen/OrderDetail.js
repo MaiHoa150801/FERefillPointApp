@@ -32,7 +32,7 @@ const OrderDetail = ({ route, navigation }) => {
       if (typeUpdate == 'delete') {
         await updateOrder({ status: 'Đã hủy' }, orderId);
       } else {
-        await updateOrder({ status: 'Giao hàng thành công' }, orderId);
+        await updateOrder({ status: 'Đã giao hàng' }, orderId);
       }
       setModal(false);
       navigation.navigate('OrderMap');

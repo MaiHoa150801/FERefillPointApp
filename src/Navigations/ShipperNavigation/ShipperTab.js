@@ -9,6 +9,7 @@ import OrderMap from '../../Screens/ShipperScreen/OrderMap';
 import OrderDetail from '../../Screens/ShipperScreen/OrderDetail';
 import OrderStackScreen from './OrderMapStack';
 import MoreScreen from '../../Screens/ShipperScreen/MoreScreen';
+import MoreStackScreen from '../../Screens/ShipperScreen/Navigation/MoreStack';
 const HomeTabs = createBottomTabNavigator();
 
 const ShipperTab = (props) => {
@@ -73,8 +74,8 @@ const ShipperTab = (props) => {
       />
       <HomeTabs.Screen
         key="more"
-        name="MoreScreen"
-        component={MoreScreen}
+        name="MoreStack"
+        component={MoreStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: ({ color, size, focused }) => (
