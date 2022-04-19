@@ -49,11 +49,20 @@ export default class OrderFollow extends Component {
     this.setState({
       shipperLocation: data.data.shipperMap,
     });
-    this.socket.current = io('http://refillpointapp.cleverapps.io');
+    this.socket.current = io('http://192.168.32.160:8080');
     this.socket.current.on('connnection', () => {
       console.log('connected to server');
     });
     this.socket.current.on(`data/${this.order.shipper_id}`, async (data) => {
+      try {
+        this._map.animateToRegion({
+          latitude: data.latitude,
+          longitude: data.longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        });
+      } catch (error) {}
+
       await this.setState({
         shipperLocation: {
           latitude: data.latitude,

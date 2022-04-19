@@ -4,8 +4,8 @@ const getUserVoucher = (account_id) => {
   return CallAPI(`uservouchers/${account_id}`);
 };
 
-const getVoucher = () => {
-  return CallAPI(`vouchers`);
+const getVoucher = (saler_id) => {
+  return CallAPI(`vouchers/saler/${saler_id}`);
 };
 
 const userSaveVoucher = (data) => {

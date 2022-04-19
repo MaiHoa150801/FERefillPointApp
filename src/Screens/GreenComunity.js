@@ -85,7 +85,7 @@ export default function GreenComunity({ navigation }) {
     return unsubscribe;
   }, []);
   const getData = async () => {
-    socket.current = io('http://refillpointapp.cleverapps.io');
+    socket.current = io('http://192.168.32.160:8080');
     socket.current.on('connnection', () => {
       console.log('connected to server');
     });

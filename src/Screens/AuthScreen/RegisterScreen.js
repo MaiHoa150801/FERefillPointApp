@@ -14,7 +14,6 @@ const RegisterScreen = ({ navigation }) => {
   const validationSchema = Yup.object({
     name: Yup.string().required('Vui lòng nhập tên!'),
     address: Yup.string().required('Vui lòng nhập địa chỉ!'),
-    gender: Yup.string().required('Chọn giới tính!'),
     phone: Yup.number('Số điện thoại không hợp lệ!')
       .required('Vui lòng nhập số điện thoại!')
       .min(100000000, 'Số điện thoại không hợp lệ!'),
@@ -24,10 +23,12 @@ const RegisterScreen = ({ navigation }) => {
     password: Yup.string()
       .required('Vui lòng nhập mật khẩu!')
       .min(6, 'Mật khẩu phải lớn hơn 6 kí tự!'),
-    cpassword: Yup.string().when('password', {
-      is: (val) => (val && val.length > 0 ? true : false),
-      then: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
-    }),
+    cpassword: Yup.string()
+      .required('Vui lòng nhập lại mật khẩu!')
+      .when('password', {
+        is: (val) => (val && val.length > 0 ? true : false),
+        then: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
+      }),
   });
   const showToastWithGravity = (message) => {
     ToastAndroid.showWithGravity(
@@ -38,7 +39,6 @@ const RegisterScreen = ({ navigation }) => {
   };
   const initialValues = {
     name: '',
-    gender: '',
     phone: '',
     email: '',
     address: '',
@@ -84,24 +84,6 @@ const RegisterScreen = ({ navigation }) => {
                   name="name"
                   placeholder="Họ tên"
                 />
-                <View style={styles.field}>
-                  <View style={styles.input}>
-                    <Picker
-                      selectedValue={props.values.gender}
-                      mode="dropdown"
-                      onValueChange={(itemValue, itemIndex) =>
-                        props.setFieldValue('gender', itemValue)
-                      }
-                    >
-                      <Picker.Item label="Giới tính" value="" />
-                      <Picker.Item label="Nam" value="Male" />
-                      <Picker.Item label="Nữ" value="Female" />
-                    </Picker>
-                  </View>
-                  {props.touched.gender && props.errors.gender ? (
-                    <Text style={styles.err}>{props.errors.gender}</Text>
-                  ) : null}
-                </View>
                 <FieldInput
                   formProps={props}
                   name="phone"

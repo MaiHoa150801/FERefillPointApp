@@ -41,7 +41,7 @@ const ShopDetailScreen = ({ navigation, route }) => {
     const profile = await SecureStore.getItemAsync('user');
     const user = await JSON.parse(profile).user;
     const response = await getOneSalespersonData(shopId);
-    const voucher = await getVoucher();
+    const voucher = await getVoucher(shopId);
     const userVou = await getUserVoucher(user._id);
     await setUserVoucher(
       userVou.data.voucher !== null
@@ -180,7 +180,7 @@ const ShopDetailScreen = ({ navigation, route }) => {
                       <Image
                         style={styles.productStyle}
                         source={{
-                          uri: e.list_image[1],
+                          uri: e.list_image.length > 0 ? e.list_image[0] : '',
                         }}
                         resizeMode="cover"
                       />

@@ -92,7 +92,7 @@ export default function PostDetail({ navigation, route }) {
     return unsubscribe;
   }, []);
   const getData = async () => {
-    socket.current = io('http://refillpointapp.cleverapps.io');
+    socket.current = io('http://192.168.32.160:8080');
     socket.current.on('connnection', () => {
       console.log('connected to server');
     });
@@ -277,7 +277,7 @@ export default function PostDetail({ navigation, route }) {
                             fontSize: 15,
                           }}
                         >
-                          Update
+                          Chỉnh sửa
                         </Text>
                       </View>
                     </MenuOption>
@@ -298,7 +298,7 @@ export default function PostDetail({ navigation, route }) {
                             fontSize: 15,
                           }}
                         >
-                          Delete
+                          Xóa
                         </Text>
                       </View>
                     </MenuOption>

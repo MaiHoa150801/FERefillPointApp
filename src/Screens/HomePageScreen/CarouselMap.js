@@ -34,11 +34,6 @@ export default class CarouselMap extends Component {
   componentDidMount() {
     this.requestLocationPermission();
     this.getData();
-    const unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.requestLocationPermission();
-      this.getData();
-    });
-    return unsubscribe;
   }
   getData = async () => {
     const response = await getSalespersonData();

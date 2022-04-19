@@ -17,7 +17,8 @@ const OrderSuccess = ({ route, navigation }) => {
     const profile = await SecureStore.getItemAsync('user');
     const user = await JSON.parse(profile).user;
     const res = await getOrder(user._id, 'Đã giao hàng');
-    setOrder(res.data.listOrder);
+    console.log(res.data.listOrder);
+    // setOrder(res.data.listOrder);
   };
   return (
     <View style={styles.container}>

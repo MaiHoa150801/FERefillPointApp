@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation, reloadApp }) {
       saveUser(user.data);
     } catch (error) {
       console.log(error);
-      showToastWithGravity('Email hoặc số điện thoại không đúng!');
+      showToastWithGravity('Sai email hoặc mật khẩu!');
     }
   };
   const saveUser = async (data) => {

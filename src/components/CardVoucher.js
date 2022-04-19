@@ -20,8 +20,16 @@ const CardVoucher = ({
       <View style={styles.voucherViewRight}>
         <Btn
           onPress={saveVoucher}
-          disabled={saved}
-          text={!saved ? 'Lưu' : type ? 'Đã dùng' : 'Đã lưu'}
+          disabled={new Date() > new Date(expiry_date) ? true : saved}
+          text={
+            !saved
+              ? 'Lưu'
+              : type
+              ? 'Đã dùng'
+              : new Date() > new Date(expiry_date)
+              ? 'Đã hết hạn'
+              : 'Đã lưu'
+          }
           style={[
             styles.saveBtn,
             { backgroundColor: saved == true ? 'gray' : '#E8833A' },

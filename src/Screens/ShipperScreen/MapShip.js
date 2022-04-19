@@ -30,7 +30,7 @@ export default class Map extends Component {
   }
   showToast = (message) => {};
   getOrder = async () => {
-    this.socket.current = io('http://refillpointapp.cleverapps.io');
+    this.socket.current = io('http://192.168.32.160:8080');
     this.socket.current.on('connnection', () => {
       console.log('connected to server');
     });
@@ -207,8 +207,8 @@ export default class Map extends Component {
           }}
           position="top"
           positionValue={50}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
+          fadeInDuration={7500}
+          fadeOutDuration={10000}
           opacity={0.8}
           textStyle={{ color: 'red' }}
         />

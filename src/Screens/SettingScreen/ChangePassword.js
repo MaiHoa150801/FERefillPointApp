@@ -86,6 +86,7 @@ export default function ChangePassword({ navigation }) {
       <ModalShow
         modalHiden={modal}
         closeBtn={false}
+        btnCf={true}
         okPress={() => {
           setModal(false);
           navigation.navigate('AccountScreen');

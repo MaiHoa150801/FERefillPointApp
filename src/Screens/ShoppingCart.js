@@ -19,6 +19,9 @@ import Line from '../components/Line';
 import { userGetVoucher } from '../service/VoucherService';
 import CardVoucher from '../components/CardVoucher';
 import CardVoucherUse from '../components/CardVoucherUse';
+import { Alert } from 'react-native';
+import { Platform } from 'react-native';
+import { ToastAndroid, AlertIOS } from 'react-native';
 const ShoppingCart = ({ navigation, route }) => {
   const [date, setDate] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -100,17 +103,27 @@ const ShoppingCart = ({ navigation, route }) => {
     }
   };
   const useVoucher = (voucherSelected) => {
-    if (!voucherSelect) {
-      setVoucherSelect(voucherSelected);
-      if (voucherSelected.discount.indexOf('%') == -1) {
-        setDiscount(total - parseInt(voucherSelected.discount));
-      } else {
-        let giam = voucherSelected.discount.replace('%', '');
-        setDiscount((parseInt(total) / 100) * parseInt(giam));
-      }
+    if (new Date() > new Date(voucherSelected.expiry_date)) {
+      Platform.OS == 'android'
+        ? ToastAndroid.showWithGravity(
+            'Mã giảm giá đã hết hạn sử dụng',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          )
+        : AlertIOS.alert('Mã giảm giá đã hết hạn sử dụng');
     } else {
-      setVoucherSelect(null);
-      setDiscount(0);
+      if (!voucherSelect) {
+        setVoucherSelect(voucherSelected);
+        if (voucherSelected.discount.indexOf('%') == -1) {
+          setDiscount(parseInt(voucherSelected.discount));
+        } else {
+          let giam = voucherSelected.discount.replace('%', '');
+          setDiscount((parseInt(total) / 100) * parseInt(giam));
+        }
+      } else {
+        setVoucherSelect(null);
+        setDiscount(0);
+      }
     }
   };
   const renderProducts = (data, index) => {
@@ -326,20 +339,23 @@ const ShoppingCart = ({ navigation, route }) => {
           style={{ marginTop: 20 }}
         >
           {voucher &&
-            voucher.map((e) => (
-              <CardVoucherUse
-                description={e.description}
-                expiry_date={e.expiry_date}
-                saved={
-                  voucherSelect == null
-                    ? false
-                    : voucherSelect._id == e._id
-                    ? true
-                    : false
-                }
-                saveVoucher={() => useVoucher(e)}
-              />
-            ))}
+            voucher.map((e) => {
+              if (new Date() < new Date(e.expiry_date))
+                return (
+                  <CardVoucherUse
+                    description={e.description}
+                    expiry_date={e.expiry_date}
+                    saved={
+                      voucherSelect == null
+                        ? false
+                        : voucherSelect._id == e._id
+                        ? true
+                        : false
+                    }
+                    saveVoucher={() => useVoucher(e)}
+                  />
+                );
+            })}
         </ScrollView>
         <View>
           <View
