@@ -1,45 +1,41 @@
 import { StyleSheet, Text, TextInput, View, Alert } from 'react-native';
 import Btn from '../../components/Button';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from 'react-native';
 import Space from '../../components/Space';
 import * as Google from 'expo-google-app-auth';
-import {
-  signInWithCredential,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { auth } from '../../../firebase';
 import * as Facebook from 'expo-facebook';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ToastAndroid, Toast } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+import {
+  LoginFacebook,
+  LoginGoogle,
+  LoginUser,
+} from '../../service/AuthService';
+import { SignInContext } from '../../contexts/authContext';
 export default function LoginScreen({ navigation, reloadApp }) {
   const [hidenpassword, setHidenPassword] = useState(true);
-
-  const checkError = (err) => {
-    switch (err) {
-      case 'auth/user-not-found':
-        showToastWithGravity('User not found!');
-        break;
-      case 'auth/wrong-password':
-        showToastWithGravity('Incorrect password!');
-        break;
-      default:
-        break;
+  const { dispatchSignedIn } = useContext(SignInContext);
+  const loginWithEmail = async (data) => {
+    try {
+      const user = await LoginUser(data);
+      await SecureStore.setItemAsync('user', JSON.stringify(user.data));
+      saveUser(user.data);
+    } catch (error) {
+      console.log(error);
+      showToastWithGravity('Sai email hoặc mật khẩu!');
     }
   };
-  const loginWithEmail = async (data) => {
-    const { email, password } = data;
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      checkError(error.code);
-    }
+  const saveUser = async (data) => {
+    dispatchSignedIn({
+      type: 'UPDATE_SIGN_IN',
+      payload: { userToken: data },
+    });
   };
   const signInWithGoogleAsync = async () => {
     try {
@@ -50,13 +46,23 @@ export default function LoginScreen({ navigation, reloadApp }) {
       });
 
       if (result.type === 'success') {
+        const {
+          idToken,
+          user: { email, name, photoUrl },
+        } = result;
+        const data = {
+          googleId: idToken,
+          email: email,
+          name: name,
+          avatar: photoUrl,
+        };
         try {
-          const credential = GoogleAuthProvider.credential(
-            result.idToken,
-            result.accessToken
-          );
-          const user = await signInWithCredential(auth, credential);
-        } catch {}
+          const user = await LoginGoogle(data);
+          await SecureStore.setItemAsync('user', JSON.stringify(user.data));
+          await saveUser(user.data);
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         return { cancelled: true };
       }
@@ -68,8 +74,22 @@ export default function LoginScreen({ navigation, reloadApp }) {
       permissions: ['public_profile'],
     });
     if (type === 'success') {
-      const credential = FacebookAuthProvider.credential(token);
-      signInWithCredential(auth, credential).catch((error) => {});
+      const response = await fetch(
+        `https://graph.facebook.com/me?access_token=${token}&fields=id,name,picture`
+      );
+      const res = await response.json();
+      const data = {
+        facebookId: res.id,
+        name: res.name,
+        avatar: res.picture.data.url,
+      };
+      try {
+        const user = await LoginFacebook(data);
+        await SecureStore.setItemAsync('user', JSON.stringify(user.data));
+        await saveUser(user.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   const validationSchema = Yup.object({

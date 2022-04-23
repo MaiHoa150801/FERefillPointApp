@@ -1,30 +1,40 @@
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AuthStackScreen from './AuthStacks';
 import HomeTab from './HomeTab';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { SignInContext, SignInContextProvider } from '../contexts/authContext';
+import * as SecureStore from 'expo-secure-store';
+import ShipperTab from './ShipperNavigation/ShipperTab';
 export default function Main() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  onAuthStateChanged(auth, (user) => {
-    if (user != null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  });
+  const { signedIn, dispatchSignedIn } = useContext(SignInContext);
+  useEffect(() => {
+    getToken();
+  }, []);
+  const getToken = async () => {
+    const userInfo = await SecureStore.getItemAsync('user');
+    dispatchSignedIn({
+      type: 'UPDATE_SIGN_IN',
+      payload: { userToken: JSON.parse(userInfo) },
+    });
+  };
   return (
     <NavigationContainer>
-      {isLoggedIn ? <HomeTab /> : <AuthStackScreen />}
+      {!signedIn.userToken ? (
+        <AuthStackScreen />
+      ) : signedIn.userToken.user.role == 'user' ? (
+        <HomeTab />
+      ) : (
+        <ShipperTab />
+      )}
     </NavigationContainer>
   );
 }
 const styles = StyleSheet.create({
   loading: {
     flex: 1,
-    backgroundColor: "gray",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

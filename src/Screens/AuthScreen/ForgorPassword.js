@@ -6,26 +6,40 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import * as Yup from 'yup';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Btn from '../../components/Button';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../../../firebase';
 import { Image } from 'react-native';
 import { Formik } from 'formik';
+import { forgotPasswordUser } from '../../service/AuthService';
+import * as SecureStore from 'expo-secure-store';
 export default function ForgotPasswordScreen({ navigation }) {
   const [modalhiden, setModalhiden] = useState(false);
-  const [email, setEmail] = useState(null);
+  const [message, setMessage] = useState({
+    type: '',
+    message: '',
+  });
   const forgotPassword = async (data) => {
     const { email: emailForgot } = data;
     try {
-      await sendPasswordResetEmail(auth, emailForgot).then((e) => {
-        setEmail(emailForgot);
+      await forgotPasswordUser({ email: emailForgot }).then(async (e) => {
+        await SecureStore.setItemAsync(
+          'resetData',
+          JSON.stringify({ email: emailForgot })
+        );
+        setMessage({
+          type: 'Thành công',
+          message: `Mã xác thực đã được gửi về ${emailForgot}`,
+        });
         setModalhiden(true);
       });
     } catch (error) {
-      setErr('Email does not exist!');
+      console.log(error);
+      setMessage({
+        type: 'Lỗi!',
+        message: `Email không tồn tại!`,
+      });
+      setModalhiden(true);
     }
   };
   const validationSchema = Yup.object({
@@ -59,14 +73,14 @@ export default function ForgotPasswordScreen({ navigation }) {
                 onChangeText={props.handleChange('email')}
                 onBlur={props.handleBlur('email')}
                 value={props.values.email}
-                placeholder=" Enter your email"
+                placeholder=" Nhập email"
               />
             </View>
             {props.touched.email && props.errors.email ? (
               <Text style={styles.txtErr}>{props.errors.email}</Text>
             ) : null}
             <Btn
-              text="Get Reset Link"
+              text="Nhận mã xác thực"
               textStyle={styles.textStyle}
               onPress={props.handleSubmit}
               style={styles.btnLogin}
@@ -75,12 +89,7 @@ export default function ForgotPasswordScreen({ navigation }) {
         )}
       </Formik>
 
-      <Modal
-        animationType="fade"
-        visible={modalhiden}
-        onRequestClose={() => setModalhiden(false)}
-        transparent={true}
-      >
+      <Modal animationType="fade" visible={modalhiden} transparent={true}>
         <View style={styles.viewModel}>
           <View style={styles.viewModelContent}>
             <View style={{ alignItems: 'center' }}>
@@ -92,7 +101,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                   uri: 'https://lh4.googleusercontent.com/proxy/lsTCw2VjeHy-iGWg0ltkQ7lfJWD6bfC0x8Q76xJF8nAOkHc1GL6Zmr2F17to0INGnSeopubJJ5QtTAxAQ43eUo5z_ms9XecbVdbRoZc',
                 }}
               />
-              <Text style={styles.successText}>Success</Text>
+              <Text style={styles.successText}>{message.type}</Text>
               <Text
                 style={{
                   textAlign: 'center',
@@ -100,14 +109,15 @@ export default function ForgotPasswordScreen({ navigation }) {
                   lineHeight: 25,
                 }}
               >
-                Reset link has been sent to {email}
+                {message.message}
               </Text>
             </View>
             <TouchableOpacity
               style={styles.buttonOK}
               onPress={() => {
                 setModalhiden(false);
-                navigation.navigate('LoginScreen');
+                if (message.type == 'Thành công')
+                  navigation.navigate('SendcodeScreen');
               }}
             >
               <Text style={{ fontWeight: 'bold', color: 'white' }}>OK</Text>

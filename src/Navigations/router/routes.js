@@ -4,6 +4,7 @@ import GreenComunity from '../../Screens/GreenComunity';
 import SettingStackScreen from '../SettingStacks';
 import ShopStackNavigator from '../ShopStackNavigatior';
 import RankScreen from '../../Screens/RankScreen';
+import PostStackScreen from '../PostStack';
 const bottomRoutes = [
   {
     name: 'HomeScreen',
@@ -19,7 +20,7 @@ const bottomRoutes = [
   },
   {
     name: 'SocietyScreen',
-    component: GreenComunity,
+    component: PostStackScreen,
     title: 'Cộng đồng xanh',
     icon: 'leaf',
   },

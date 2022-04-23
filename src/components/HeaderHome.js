@@ -2,15 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { colors } from '../global/styles';
-import { auth } from '../../firebase';
+import * as SecureStore from 'expo-secure-store';
+import { getRefillPoint } from '../service/RefillPointService';
 const HeaderHome = () => {
   const [user, setUser] = useState(null);
+  const [refillPoint, setRefillPoint] = useState(0);
   useEffect(() => {
     getUser();
   }, []);
-  const getUser = () => {
-    setUser(auth.currentUser);
+  const getUser = async () => {
+    const profile = await SecureStore.getItemAsync('user');
+    const user = JSON.parse(profile).user;
+    setUser(user);
+    const point = await getRefillPoint(user._id);
+    setRefillPoint(point.data.refillPoint.score);
   };
   return (
     <>
@@ -21,14 +26,14 @@ const HeaderHome = () => {
             height={60}
             style={styles.image}
             source={{
-              uri: user.photoURL
-                ? user.photoURL
+              uri: user.avatar.url
+                ? user.avatar.url
                 : 'https://icon-library.com/images/icon-material/icon-material-12.jpg',
             }}
           />
           <View style={styles.title}>
-            <Text style={styles.txtTitle}>{user.displayName}</Text>
-            <Text style={styles.txtTitle}>100RP</Text>
+            <Text style={styles.txtTitle}>{user.name}</Text>
+            <Text style={styles.txtTitle}>{refillPoint}RP</Text>
           </View>
           <View style={styles.bell}>
             <FontAwesome name="bell" size={35} color={'#ffffff'} />

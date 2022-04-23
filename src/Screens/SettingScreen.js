@@ -1,10 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
-
+import * as SecureStore from 'expo-secure-store';
+import { SignInContext } from '../contexts/authContext';
 export default function SettingScreen({ navigation, navigation: { goBack } }) {
+  const { dispatchSignedIn } = useContext(SignInContext);
+  const logout = async () => {
+    await SecureStore.deleteItemAsync('user');
+    dispatchSignedIn({
+      type: 'UPDATE_SIGN_IN',
+      payload: { userToken: null },
+    });
+  };
   return (
     <View
       style={{
@@ -31,7 +38,6 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
         <Text
           style={{
             fontSize: 25,
-            color: '#eeeee',
             marginLeft: 100,
           }}
         >
@@ -88,7 +94,7 @@ export default function SettingScreen({ navigation, navigation: { goBack } }) {
           <Ionicons name="chevron-forward-sharp" size={20} color={'black'} />
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.container} onPress={() => signOut(auth)}>
+      <TouchableOpacity style={styles.container} onPress={() => logout()}>
         <Ionicons name="exit-outline" size={45} color={'#ACB2B8'} />
         <View style={styles.userName}>
           <Text style={styles.Text}>Đăng xuất</Text>

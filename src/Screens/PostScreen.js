@@ -7,15 +7,15 @@ import {
   Button,
   Image,
   Platform,
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import Btn from "../components/Button";
-import * as ImagePicker from "expo-image-picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
+} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import Btn from '../components/Button';
+import * as ImagePicker from 'expo-image-picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function PostScreen({ navigation: { goBack } }) {
-  const [text, onChangeText] = React.useState("What do you want to share?");
+  const [text, onChangeText] = React.useState('What do you want to share?');
   const [image, setImage] = useState(null);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -25,8 +25,6 @@ export default function PostScreen({ navigation: { goBack } }) {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -75,11 +73,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   header: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 50,
     marginTop: 10,
     borderBottomWidth: 0.5,
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
   },
   textHeader: {
     fontSize: 25,
@@ -88,14 +86,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   textStyle: {
-    color: "#ffffff",
-    textAlign: "center",
+    color: '#ffffff',
+    textAlign: 'center',
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   btnCapNhat: {
-    backgroundColor: "#3366CC",
+    backgroundColor: '#3366CC',
     padding: 5,
     height: 40,
     borderRadius: 10,
@@ -104,12 +102,12 @@ const styles = StyleSheet.create({
 
   input: {
     height: 200,
-    width: "90%",
+    width: '90%',
     margin: 12,
     padding: 10,
   },
   post: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 10,
     marginLeft: 10,
   },
@@ -118,17 +116,17 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   postImage: {
-    width: "100%",
+    width: '100%',
   },
   image: {
     width: 200,
     height: 200,
   },
   BtnAddImage: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderTopWidth: 1,
   },
   iconAddImage: {

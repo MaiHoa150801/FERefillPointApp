@@ -18,7 +18,14 @@ const dataSource = [
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
   'http://xacamhung.hatinh.gov.vn/uploads/news/2020_07/anh-moi-truong.png',
 ];
-const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
+const ModalMapShop = ({
+  openModal,
+  closeModal,
+  nameShop,
+  navigation,
+  modalData,
+  setDirection,
+}) => {
   return (
     <ModalBottom
       modalVisible={openModal}
@@ -41,7 +48,7 @@ const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
       <RowIcon
         style={{ marginTop: 5 }}
         icon="map-marker"
-        text="329 Đình Nghệ, Sơn Trà, Đà Nẵng"
+        text={modalData ? modalData.address : ''}
       />
       <View style={[styles.row, { marginTop: 10 }]}>
         <View style={styles.row}>
@@ -57,7 +64,10 @@ const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
       <View style={[styles.row, styles.mt10]}>
         <Btn
           text={
-            <TouchableOpacity style={[styles.row, styles.buttonDirection]}>
+            <TouchableOpacity
+              onPress={setDirection}
+              style={[styles.row, styles.buttonDirection]}
+            >
               <FontAwesome name="mail-forward" size={15} color="#1a73e8" />
               <Text style={styles.txtDirection}>Đường đi</Text>
             </TouchableOpacity>
@@ -66,7 +76,11 @@ const ModalMapShop = ({ openModal, closeModal, nameShop, navigation }) => {
         <Space width={20} />
         <Btn
           style={styles.buttonView}
-          onPress={() => navigation.navigate('ShopDetail')}
+          onPress={() =>
+            navigation.navigate('ShopDetail', {
+              shopId: modalData ? modalData.account_id : 0,
+            })
+          }
           text="View shop"
           textStyle={styles.txtBtnView}
         />

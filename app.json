@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "KindicareApp",
-    "slug": "KindicareApp",
+    "name": "RifillPointApp",
+    "slug": "RifillPointApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,9 +9,9 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "marginLeft":"20%",
-      "marginRight":"20%",
-      "with":"60%"
+      "marginLeft": "20%",
+      "marginRight": "20%",
+      "with": "60%"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -26,11 +26,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.RifillPointApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   },
   "plugins": [
     [

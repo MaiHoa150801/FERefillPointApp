@@ -1,183 +1,189 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
-import Btn from "../../components/Button";
-import { useState } from "react";
-import { Feather } from "@expo/vector-icons";
-export default function ChangePassword() {
-  const [password, setPassword] = useState(null);
-  const [newPassword, setNewPassword] = useState(null);
-  const [confirmPassword, setconfirmPassword] = useState(null);
-  const [hidenpassword, setHidenPassword] = useState(true);
-  const [newhidenpassword, setNewHidenPassword] = useState(true);
-  const [confirmhidenpassword, setConfirmHidenPassword] = useState(true);
+import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import Btn from '../../components/Button';
+import FieldInput from '../../components/Form/FieldInput';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import ModalShow from '../../components/ModalShow';
+import { updatePasswordAsyn } from '../../service/AuthService';
+import { Text } from 'react-native';
+export default function ChangePassword({ navigation }) {
+  const [modal, setModal] = useState(false);
+  const [err, setErr] = useState(null);
+  const validationSchema = Yup.object({
+    oldPassword: Yup.string().required('Vui lòng nhập mật khẩu cũ!'),
+    newPassword: Yup.string()
+      .required('Vui lòng nhập mật khẩu mới!')
+      .min(6, 'Mật khẩu phải lớn hơn 6 kí tự!'),
+    confirmPassword: Yup.string().when('newpassword', {
+      is: (val) => (val && val.length > 0 ? true : false),
+      then: Yup.string().oneOf(
+        [Yup.ref('newpassword')],
+        'Mật khẩu không khớp!'
+      ),
+    }),
+  });
+  const initialValues = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  };
+  const updatePassword = async (data) => {
+    try {
+      const res = await updatePasswordAsyn(data);
+      setModal(true);
+    } catch (error) {
+      console.log(error);
+      setErr('Mật khẩu cũ không đúng!');
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <View style={styles.form}>
-            <View style={styles.input}>
-              <View style={styles.inputPass}>
-                <TextInput
-                  style={styles.textInput}
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={hidenpassword ? true : false}
-                  placeholder="Password"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values, formikActions) => {
+              updatePassword(values);
+            }}
+          >
+            {(props) => (
+              <View style={styles.form}>
+                <FieldInput
+                  formProps={props}
+                  name="oldPassword"
+                  placeholder="Nhập mật khẩu cũ"
+                  type="password"
                 />
-                <TouchableOpacity
-                  onPress={() => setHidenPassword(!hidenpassword)}
-                >
-                  {hidenpassword ? (
-                    <Feather name="eye-off" size={20} color="black" />
-                  ) : (
-                    <Feather name="eye" size={20} color="black" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.input}>
-              <View style={styles.inputPass}>
-                <TextInput
-                  style={styles.textInput}
-                  value={newPassword}
-                  onChangeText={setNewPassword}
-                  secureTextEntry={newhidenpassword ? true : false}
+                {err && <Text style={styles.err}>{err}</Text>}
+                <FieldInput
+                  formProps={props}
+                  name="newPassword"
                   placeholder="Nhập mật khẩu mới"
+                  type="password"
                 />
-                <TouchableOpacity
-                  onPress={() => setNewHidenPassword(!newhidenpassword)}
-                >
-                  {newhidenpassword ? (
-                    <Feather name="eye-off" size={20} color="black" />
-                  ) : (
-                    <Feather name="eye" size={20} color="black" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.input}>
-              <View style={styles.inputPass}>
-                <TextInput
-                  style={styles.textInput}
-                  value={confirmPassword}
-                  onChangeText={setconfirmPassword}
-                  secureTextEntry={confirmhidenpassword ? true : false}
-                  placeholder="Nhập lại mật khẩu mới"
+                <FieldInput
+                  formProps={props}
+                  name="confirmPassword"
+                  placeholder="Xác nhận lại mật khẩu mới"
+                  type="password"
                 />
-                <TouchableOpacity
-                  onPress={() => setConfirmHidenPassword(!confirmhidenpassword)}
-                >
-                  {confirmhidenpassword ? (
-                    <Feather name="eye-off" size={20} color="black" />
-                  ) : (
-                    <Feather name="eye" size={20} color="black" />
-                  )}
-                </TouchableOpacity>
+                <Btn
+                  text="Thay đổi"
+                  textStyle={styles.textStyle}
+                  onPress={props.handleSubmit}
+                  style={styles.btnCapNhat}
+                />
               </View>
-            </View>
-          </View>
-          <Btn
-            text="Cập Nhật"
-            textStyle={styles.textStyle}
-            onPress={null}
-            style={styles.btnCapNhat}
-          />
+            )}
+          </Formik>
         </View>
       </ScrollView>
+      <ModalShow
+        modalHiden={modal}
+        closeBtn={false}
+        btnCf={true}
+        okPress={() => {
+          setModal(false);
+          navigation.navigate('AccountScreen');
+        }}
+      >
+        <Text style={styles.success}>Thay đổi mật khẩu thành công </Text>
+      </ModalShow>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
+    width: '90%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   textStyle: {
-    color: "#ffffff",
-    textAlign: "center",
+    color: '#ffffff',
+    textAlign: 'center',
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   btnCapNhat: {
-    backgroundColor: "#3366CC",
+    backgroundColor: '#3366CC',
     padding: 15,
     borderRadius: 10,
-    width: "100%",
+    width: '100%',
     marginTop: 20,
   },
   divider: {
     margin: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   textInput: {
-    width: "100%",
+    width: '100%',
     padding: 10,
   },
   form: {
-    width: "100%",
+    width: '100%',
   },
   input: {
     padding: 5,
     borderWidth: 1,
-    borderColor: "#d9d5d4",
+    borderColor: '#d9d5d4',
     borderRadius: 40,
-    marginBottom: "5%",
+    marginBottom: '5%',
   },
   inputPass: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "90%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
   },
   textForgor: {
-    textAlign: "right",
-    color: "#111111",
+    textAlign: 'right',
+    color: '#111111',
   },
   textFooter: {
     marginBottom: 60,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textOr: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
     marginTop: 25,
   },
   txt: {
-    color: "black",
-    textAlign: "center",
+    color: 'black',
+    textAlign: 'center',
     margin: 2,
     fontSize: 15,
   },
   err: {
-    color: "red",
-    paddingLeft: 10,
+    color: 'red',
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   or: {
     fontSize: 17,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  success: {
+    textAlign: 'center',
+    fontSize: 17,
+    color: 'green',
   },
 });

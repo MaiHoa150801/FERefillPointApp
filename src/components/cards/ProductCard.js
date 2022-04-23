@@ -1,22 +1,22 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 
-const ProductCard = () => {
+const ProductCard = ({ data }) => {
   return (
-    <View style={styles.productView}>
-      <View style={styles.productItemView}>
+    <View style={styles.productItemView}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ProductDetail", { productID: data.id })
+        }
+      >
         <Image
           style={styles.productStyle}
-          source={{
-            uri: "https://cf.shopee.vn/file/03c4e055b7fea58f17224da588f415c2",
-          }}
+          source={data.productImage}
           resizeMode="cover"
         />
-        <Text style={styles.nameProduct}>
-          Refill nước giặt hữu cơ Fuwa3e oragnic sinh học
-        </Text>
-        <Text style={styles.price}>10.000đ/100ml</Text>
-      </View>
+        <Text style={styles.nameProduct}>{data.name}</Text>
+        <Text style={styles.price}>{data.unit_price}đ/100ml</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     fontSize: 17,
   },
-//   productView: {
-//     flex: 1,
-//     flexDirection: "row",
-//   },
+  //   productView: {
+  //     flex: 1,
+  //     flexDirection: "row",
+  //   },
 });

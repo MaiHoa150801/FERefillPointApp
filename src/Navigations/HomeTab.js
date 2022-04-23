@@ -10,9 +10,11 @@ const HomeTabs = createBottomTabNavigator();
 const HomeTab = (props) => {
   return (
     <HomeTabs.Navigator
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
+      }}
       screenOptions={{
         tabBarActiveTintColor: colors.buttons,
-        tabBarStyle: [{ display: 'flex' }, null],
       }}
     >
       {bottomRoutes.map((e, index) => {
