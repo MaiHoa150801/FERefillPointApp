@@ -2,9 +2,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 const CardShop = ({ img, name, address, key }) => (
-  <TouchableOpacity style={styles.shopView}>
+  <TouchableOpacity style={styles.shopView} key={key}>
     <Image
-      key={key}
       style={styles.imgShop}
       source={{
         uri: img,
